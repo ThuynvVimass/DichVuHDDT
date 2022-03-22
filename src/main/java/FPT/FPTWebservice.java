@@ -22,7 +22,7 @@ public class FPTWebservice {
 	public String test2020() {
 
 		if (request != null) {
-			Data.ghiLogRequest("IP: " + request.getRemoteAddr());
+			Data.ghiLogRequest("IP 1231: " + request.getRemoteAddr());
 			return request.getRemoteAddr();
 		}
 		return "Loi";
