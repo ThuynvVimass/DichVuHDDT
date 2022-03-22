@@ -45,7 +45,7 @@ public class FPTFunc {
 
 	public static String lapHoaDon(String input)
 	{		
-		Data.ghiLogRequest("================ lapHoaDon()1 ================");
+		Data.ghiLogRequest("================ lapHoaDon() ================");
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
