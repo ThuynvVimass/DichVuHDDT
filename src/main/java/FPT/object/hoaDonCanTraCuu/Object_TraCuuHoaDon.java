@@ -14,7 +14,10 @@ public class Object_TraCuuHoaDon {
 	public String soHoaDon = "";				// seq
 	public String maSoThueNguoiMua = "";		// btax
 
-	public String trangThai = "";				// status
+	public String trangThai = "";				// status 	 1 Chờ cấp số
+//															 2 Chờ duyệt
+//															 3 Đã duyệt
+//															 4 Đã huỷ
 
 	public String username = "";				// username
 	public String password = "";				// password

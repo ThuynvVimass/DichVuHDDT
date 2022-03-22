@@ -74,10 +74,7 @@ public class CMCFunc {
 		ketQua.msgContent = ErrorCode.MES_FALSE;
 		
 		Data.ghiLogRequest("ApiPHanhHDon: input " + input);
-		
-		
 		DefaultServiceSoapProxy def = new DefaultServiceSoapProxy();
-		
 		try {
 			
 			ObjectThongTinHoaDon objHD = new Gson().fromJson(input, ObjectThongTinHoaDon.class);
@@ -177,11 +174,8 @@ public class CMCFunc {
 		ketQua.msgContent = ErrorCode.MES_FALSE;
 		
 		Data.ghiLogRequest("ApiPHanhHDon: input " + input);
-		
 		DefaultServiceSoapProxy def = new DefaultServiceSoapProxy();
-		
 		try {
-			
 			ObjectThongTinHoaDon objHD = new Gson().fromJson(input, ObjectThongTinHoaDon.class);
 			
 			ThongTinDonVi nBan = TableDonVi.getThongTinDonVi(objHD.MSTNBan);
@@ -222,11 +216,8 @@ public class CMCFunc {
 		ketQua.msgContent = ErrorCode.MES_FALSE;
 		
 		Data.ghiLogRequest("ApiKyHDon: input " + input);
-		
 		DefaultServiceSoapProxy def = new DefaultServiceSoapProxy();
-		
 		try {
-			
 			ObjectKeyHoaDon objKeyHD = new Gson().fromJson(input, ObjectKeyHoaDon.class);
 			
 			String ketQuaPhatHanhHoaDon = def.apiKyHDon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.b_KeyHDon);
@@ -275,11 +266,8 @@ public class CMCFunc {
 		ketQua.msgContent = ErrorCode.MES_FALSE;
 		
 		Data.ghiLogRequest("ApiInHoadon: input " + input);
-		
 		DefaultServiceSoapProxy def = new DefaultServiceSoapProxy();
-		
 		try {
-			
 			ObjectKeyHoaDon objKeyHD = new Gson().fromJson(input, ObjectKeyHoaDon.class);
 			
 			String inHoaDon_response = def.apiInHoadon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.b_KeyHDon);
@@ -323,13 +311,10 @@ public class CMCFunc {
 		ObjectMessageResult ketQua = new ObjectMessageResult();
 		ketQua.msgCode = ErrorCode.FALSE;
 		ketQua.msgContent = ErrorCode.MES_FALSE;
-		
+
 		Data.ghiLogRequest("ApiHuyHDon: input " + input);
-		
 		DefaultServiceSoapProxy def = new DefaultServiceSoapProxy();
-		
 		try {
-			
 			ObjectKeyHoaDon objKeyHD = new Gson().fromJson(input, ObjectKeyHoaDon.class);
 			
 			String ketQuaHuyHoaDon = def.apiHuyHDon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.b_KeyHDon);
@@ -361,11 +346,8 @@ public class CMCFunc {
 		ketQua.msgContent = ErrorCode.MES_FALSE;
 
 		Data.ghiLogRequest("ApiLayTTinMSKHHDon: input " + input);
-
 		DefaultServiceSoapProxy def = new DefaultServiceSoapProxy();
-
 		try {
-
 			ObjectLayTTinMSKHHDon objKeyHD = new Gson().fromJson(input, ObjectLayTTinMSKHHDon.class);
 			String b_loai = objKeyHD.loaiHoaDon;
 			double b_ngayph = 20220321;
