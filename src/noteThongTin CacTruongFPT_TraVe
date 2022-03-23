@@ -1,0 +1,22 @@
+
+-- Tra Cứu hoá đơn:
+
+   -   Trang thái hoá đơn API Search trả ra là field status, sẽ có 1 trạng thái như sau a nhé:
+       1 Chờ cấp số
+       2 Chờ duyệt
+       3 Đã duyệt
+       4 Đã huỷ
+
+   -   Thẻ status_received: Trạng thái CQT trả
+       -------- CÓ MÃ
+       0: Chờ gửi lên CQT
+       1: Đã gửi sangCQT với Mã Giao dịch: + -Mã giao dịch
+       9: Thông báo trả về của CQT + Mô tả lỗi
+       10:Thông báo trả về của CQT + Mã CQT
+       -------- Không mã
+       0: Chờ gửi lên CQT
+       1: Đã gửi sangCQT với Mã Giao dịch: + Mã giao dịch
+       9: Thông báo trả về của CQT + Mô tả lỗi
+       8 :Thông báo trả về của CQT (Hợp
+
+   - field ma_cqthu: là mã CQT cấp cho hoá đơn ạ

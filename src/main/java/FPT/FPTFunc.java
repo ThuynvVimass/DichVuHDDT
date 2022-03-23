@@ -34,6 +34,7 @@ import FPT.objectResponse.Root;
 import FPT.objectResponse.Root_TT;
 import connect.ConnectUsingGet;
 import connect.PostBody;
+import share.object.ObjectMapper;
 import vn.vimass.csdl.object.ErrorCode;
 import vn.vimass.csdl.object.ObjectMessageResult;
 import vn.vimass.utils.Data;
@@ -850,4 +851,72 @@ public class FPTFunc {
 		return new Gson().toJson(result);
 	}
 
+	public static String traCuuHoaDon2(String input)
+	{
+		Data.ghiLogRequest("================ traCuuHoaDon() ================");
+		Data.ghiLogRequest("input " + input);
+		ObjectMessageResult result = new ObjectMessageResult();
+		result.msgCode = ErrorCode.FALSE;
+		result.msgContent = ErrorCode.MES_FALSE;
+
+		Object_TraCuuHoaDon objInput = new Gson().fromJson(input, Object_TraCuuHoaDon.class);
+
+		try {
+			ThongTinDonVi donvi = new ThongTinDonVi();
+			donvi = TableDonVi.getThongTinDonVi(objInput.maSoThueNguoiBan);
+
+			objInput.username = donvi.user;
+			objInput.password = donvi.password;
+
+			Data.ghiLogRequest("donvi: " + objInput.username);
+		}catch (Exception e) {
+			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
+		}
+		if (objInput.dinhDangMuonTraVe.equals(""))objInput.dinhDangMuonTraVe = "json";
+		String url = FPTUltis.URL_TRACUU_HOADON;
+
+		url = UriBuilder.fromUri(url).queryParam("type", objInput.dinhDangMuonTraVe)
+				.queryParam("stax", objInput.maSoThueNguoiBan)
+				.queryParam("sid", objInput.sidHoaDon)
+				.queryParam("fd", objInput.tuNgay)
+				.queryParam("td", objInput.denNgay)
+				.queryParam("form", objInput.mauSoHoaDon)
+				.queryParam("serial", objInput.kyHieuHoaDon)
+				.queryParam("seq", objInput.soHoaDon)
+				.queryParam("btax", objInput.maSoThueNguoiMua)
+				.queryParam("status", objInput.trangThai)
+
+				.build().toString();
+
+		Data.ghiLogRequest("url Get : " + url);
+
+//		try {
+		String response = ConnectUsingGet.getContentWithHeader(url, objInput.username, objInput.password);
+		response = response.replace("//", "");
+		if (response.indexOf("[")== -1) {
+			result.result = response;
+		} else {
+			response = "{\"listHD\":" + response + "}";
+			Data.ghiLogRequest(" FPT: " + response);
+			Gson gson = new GsonBuilder()
+					.registerTypeAdapter(double.class, new DoubleTypeAdapter())
+					.registerTypeAdapter(int.class, new IntegerTypeAdapter())
+					.create();
+			Response_TC r = gson.fromJson(response, Response_TC.class);
+
+
+//				Object_ListHoaDon hddg = Main.objectResponseToObjectHoaDonDonGian(r);
+//				ArrayList<Doc_TC> ar = new Gson().fromJson(response, Doc_TC.class);
+			result.msgCode = ErrorCode.SUCCESS;
+			result.msgContent = ErrorCode.MES_SUCCESS;
+			result.result = ObjectMapper.responseFPT_toObject_ListHoaDon(r);
+		}
+
+//		}catch (Exception e) {
+//			Data.ghiLogRequest("Lỗi : " + e);
+//			result.result = e.getMessage();
+//		}
+
+		return new Gson().toJson(result);
+	}
 }

@@ -126,4 +126,14 @@ public class FPTWebservice {
 		return FPTFunc.traCuuHoaDon(input);
 		
 	}
+
+	@POST
+	@Path("/searchInvoice2")
+	public String searchInvoice2(String input) {
+
+		Data.ghiLogRequest("IP:" + request.getRemoteAddr());
+		return FPTFunc.traCuuHoaDon2(input);
+
+	}
+
 }
