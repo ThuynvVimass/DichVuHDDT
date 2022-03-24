@@ -15,8 +15,8 @@ public class ObjectThongTinHoaDon {
 	public String MSTNBan = "";
 	public String MSTNMua = "";
 	public String EmailNMua = "";
-	public ThongTinDonVi NBan;
-	public ThongTinDonVi NMua;
+	public ThongTinDonVi NBan = new ThongTinDonVi();
+	public ThongTinDonVi NMua = new ThongTinDonVi();
 		
 	@Override
 	public String toString() {

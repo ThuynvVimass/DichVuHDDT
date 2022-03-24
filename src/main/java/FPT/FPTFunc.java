@@ -12,7 +12,6 @@ import CMC.Table.TableDonVi;
 import CMC.object.ObjectTraCuuThongTinDoanhNghiep;
 import CMC.object.ThongTin;
 import CMC.object.ThongTinDonVi;
-import FPT.object.hoaDonCanKyDuyet.Inv_Duyet;
 import FPT.object.hoaDonCanKyDuyet.Object_HoaDonCanKyDuyet;
 import FPT.object.hoaDonCanKyDuyet.Object_HoaDonCanKyDuyet_FPT;
 import FPT.object.hoaDonCanTraCuu.Object_TraCuuHoaDon;

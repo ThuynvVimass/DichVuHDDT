@@ -10,7 +10,7 @@ public class Object_ThongTinHoaDon {
 
 	public String maSoThueNguoiBan;
 	public String maSoThueNguoiMua;
-	public int loaiHoaDon;
+	public String loaiHoaDon;
 	public String tenNguoiMua;
 	public String soDienThoaiNguoiMua;
 	public String emailNguoiMua;

@@ -3,6 +3,7 @@ package share.object;
 import FPT.object.hoaDonCanTraCuu.objectResponse.Item_TC;
 import FPT.object.hoaDonCanTraCuu.objectResponse.Response_TC;
 import FPT.object.hoaDonCanTraCuu.objectResponse.Root_TC;
+import FPT.object.hoaDonTaoMoi.Object_ThongTinHoaDon;
 import share.object.objectHoaDonDonGian.Item;
 import share.object.objectHoaDonDonGian.Root;
 import share.object.objectHoaDonDonGian.Object_ListHoaDon;
@@ -95,4 +96,22 @@ public class ObjectMapper {
         return kq;
     }
 
+    public static Object_ThongTinHoaDon inputToRequestFPT(Root objInput) {
+        Object_ThongTinHoaDon kq = new Object_ThongTinHoaDon();
+
+        kq.maSoThueNguoiBan = objInput.thongTinNguoiBan.maSoThue;
+        kq.maSoThueNguoiMua = objInput.thongTinNguoiBan.maSoThue;
+        kq.loaiHoaDon = objInput.thongTinHoaDon.loaiHoaDon;
+        kq.tenNguoiMua = objInput.thongTinNguoiMua.tenNgMua;
+        kq.soDienThoaiNguoiMua = objInput.thongTinNguoiMua.sdt;
+        kq.emailNguoiMua = objInput.thongTinNguoiMua.mail;
+        kq.hinhThucThanhToan = objInput.thongTinHoaDon.loaiHinhThanhToan;
+        kq.soTaiKhoanNguoiMua = objInput.thongTinNguoiMua.soTaiKhoan;
+        kq.nganHangNguoiMua = objInput.thongTinNguoiMua.nganHang;
+        kq.ghiChu = objInput.thongTinHoaDon.note;
+        kq.tiGia = objInput.thongTinHoaDon.tiGia;
+
+
+        return kq;
+    }
 }
