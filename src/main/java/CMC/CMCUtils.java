@@ -39,8 +39,6 @@ public class CMCUtils {
 	public final static int KIEUPHATHANH_DIEU_CHINH = 3;
 	public final static int KIEUPHATHANH_THAY_THE = 4;
 
-	
-
 	public static String signMsg(String sSource, String path_pubkey) {
 
 		byte[] bSource = null;
@@ -362,9 +360,7 @@ public class CMCUtils {
 		}
 		return kq;
 	}
-	
-	
-	
+
 	public static String getIdSaoKeNabAPI(String kqGiaiMa) {
 		String kq = "";
 		{
@@ -381,7 +377,6 @@ public class CMCUtils {
 		}
 		return kq;
 	}
-
 
 	public static String layTenChuTheTKNapas247(String kqGiaiMa) {
 		String kq = "";
@@ -405,7 +400,6 @@ public class CMCUtils {
 		return kq;
 	}
 	
-	
 	public static String layValueSoDu(String kqGiaiMa) {
 		String kq = "";
 		{
@@ -428,8 +422,7 @@ public class CMCUtils {
 		}
 		return kq;
 	}
-	
-	
+
 //	public final static String URL = "jdbc:mysql://localhost:3306/mobilebank_db?useUnicode=yes&characterEncoding=UTF-8";
 //	public final static String USER = "root";
 //	public final static String PASS = "root";

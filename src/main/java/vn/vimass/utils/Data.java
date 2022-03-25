@@ -16,8 +16,6 @@ import org.jsoup.select.Elements;
 
 public class Data {
 
-	
-	
 	public final static String LOG_FOLDER_PATH = "D://HDDT_LOG/";
 	public final static String FOLDER_LOG = LOG_FOLDER_PATH + "LOG/";
 	

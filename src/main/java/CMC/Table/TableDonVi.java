@@ -67,12 +67,8 @@ public class TableDonVi {
 	
 	public static String taoDuLieuDonVi(ThongTinDonVi item) {
 		String TAG = "taoDuLieuDonVi=========";
-		
-		
 		String idKQ = "";
-		
 		String checkSum1 = "";
-
 		try {
 			
 			String strSqlInsert = "INSERT INTO " + TABLE_NAME + ""
@@ -188,12 +184,8 @@ public class TableDonVi {
 	
 	public static String suaDuLieuDonVi(ThongTinDonVi item) {
 		String TAG = "suaDuLieuDonVi=========";
-		
-		
 		String idKQ = "";
-		
 		String checkSum1 = "";
-
 		try {
 			
 			String strSqlUpdate = "UPDATE " + TABLE_NAME + " SET "
