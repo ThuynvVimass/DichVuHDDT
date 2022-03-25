@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class ObjectHoaDon {
-	
+
+	public String keyHoaDon;
 	public String NBan;
 	public String NMua;
 	public String soHoaDon;
-	public String maHoaDon;
+	public String maTraCuuHoaDon;
+	public String mauSoHoaDon;
 	public String maSoDuThuong;
 	public String linkPDF;
 	public String linkXML;

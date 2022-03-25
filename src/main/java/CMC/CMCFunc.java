@@ -71,7 +71,7 @@ public class CMCFunc {
 			{				
 				if(ketQuaPhatHanh.errorCode.equals("200"))
 				{															
-					String kyHoaDon_response = def.apiKyHDon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, ketQuaPhatHanh.idHoaDon);
+					String kyHoaDon_response = def.apiKyHDon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, ketQuaPhatHanh.keyHoaDon);
 					Data.ghiLogRequest("------------apiKyHDon---------------- ");
 					ObjectKetQuaHoaDon ketQuaKyHoaDon = phanTichKetQua(kyHoaDon_response,"apiKyHDon");
 					if(ketQuaKyHoaDon.errorCode.equals("200"))
@@ -79,34 +79,35 @@ public class CMCFunc {
 						Data.ghiLogRequest("apiKyHDon: " +ketQuaKyHoaDon.errorCode + " " + ketQuaKyHoaDon.thongTinThem);
 						String xmlDuLieuSauKy = vn.vimass.utils.VimassCommon.getBase64(ketQuaKyHoaDon.thongTinThem);
 						// Luu du lieu
-						String XML_FILENAME = Data.FOLDER_XML_HOADON_CMC + "/" + ketQuaPhatHanh.mauSoHoaDon.replace("/", ".") + "_"+ketQuaPhatHanh.SoHoaDon;
+						String XML_FILENAME = Data.FOLDER_XML_HOADON_CMC + "/" + ketQuaPhatHanh.mauSoHoaDon.replace("/", ".") + "_"+ketQuaPhatHanh.soHoaDon;
 						Data.ghiLogRequest("XML_FILENAME: " +XML_FILENAME);
 						FileManager.writeFile(XML_FILENAME + ".xml", xmlDuLieuSauKy, false);
 						vn.vimass.utils.VimassCommon.delay(500);
 						if(FileManager.checkFileExist(XML_FILENAME + ".xml"))
 						{
 							Data.ghiLogRequest("apiInHoadon: Luu file XML " + XML_FILENAME + " thanh cong!");
-							String inHoaDon_response = def.apiInHoadon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, ketQuaPhatHanh.idHoaDon);
+							String inHoaDon_response = def.apiInHoadon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, ketQuaPhatHanh.keyHoaDon);
 							Data.ghiLogRequest("------------apiInHoadon---------------- ");
 							ObjectKetQuaHoaDon ketQuaInHoaDon = phanTichKetQua(inHoaDon_response,"apiInHoadon");
 							if(ketQuaInHoaDon.errorCode.equals("200"))
 							{
 								Data.ghiLogRequest("apiInHoadon:kq " +ketQuaInHoaDon.errorCode + " " + ketQuaInHoaDon.thongTinThem);
 								// Luu du lieu hoa don	
-								String soHoaDonInput = ketQuaPhatHanh.SoHoaDon;
-								String maHoaDonInput = ketQuaPhatHanh.maTraCuuHoaDon;								
-								String maSoDuThuongInput = randomInt() + ketQuaPhatHanh.SoHoaDon;
-								String keyHoaDon = ketQuaPhatHanh.idHoaDon;
+								String soHoaDonInput = ketQuaPhatHanh.soHoaDon;
+								String mauSoHoaDonInput = ketQuaPhatHanh.mauSoHoaDon;
+								String maTraCuuHoaDonInput = ketQuaPhatHanh.maTraCuuHoaDon;
+								String maSoDuThuongInput = randomInt() + ketQuaPhatHanh.soHoaDon;
+								String keyHoaDon = ketQuaPhatHanh.keyHoaDon;
 								String coQuanThueInput = objHD.NBan.coQuanThue;
 								String linkPDFInput = ketQuaInHoaDon.thongTinThem;
 								String linkXMLInput = XML_FILENAME + ".xml";
-								String kq = TableHoaDon.taoDuLieu(objHD, keyHoaDon, soHoaDonInput, maHoaDonInput, maSoDuThuongInput, coQuanThueInput, linkPDFInput, linkXMLInput);
+								String kq = TableHoaDon.taoDuLieu(objHD, keyHoaDon, soHoaDonInput, mauSoHoaDonInput, maTraCuuHoaDonInput, maSoDuThuongInput, coQuanThueInput, linkPDFInput, linkXMLInput);
 								if(kq!="")
 								{
 									ketQua.result = ketQuaPhatHanh;
 									ketQua.msgCode = ErrorCode.SUCCESS;
 									ketQua.msgContent = ErrorCode.MES_SUCCESS;
-									guiEmailHoaDon(objHD.NBan.tenDoanhNghiep,objHD.NMua.tenDoanhNghiep, soHoaDonInput, maHoaDonInput, maSoDuThuongInput, linkPDFInput, linkXMLInput, objHD.EmailNMua);
+									guiEmailHoaDon(objHD.NBan.tenDoanhNghiep,objHD.NMua.tenDoanhNghiep, soHoaDonInput, maTraCuuHoaDonInput, maSoDuThuongInput, linkPDFInput, linkXMLInput, objHD.EmailNMua);
 								}
 							}
 							else {
@@ -136,7 +137,6 @@ public class CMCFunc {
 				Data.ghiLogRequest("ApiPHanhHDon: Loi");	
 			}
 		} catch (Exception e) {
-			
 			Data.ghiLogRequest("ApiPHanhHDon: Exception " + e.getMessage());
 		}		
 		return new Gson().toJson(ketQua);
@@ -169,14 +169,15 @@ public class CMCFunc {
 			if(ketQuaPhatHanh.errorCode.equals("200"))
 			{
 				// Luu du lieu hoa don
-				String soHoaDonInput = ketQuaPhatHanh.SoHoaDon;
-				String maHoaDonInput = ketQuaPhatHanh.maTraCuuHoaDon;
-				String maSoDuThuongInput = randomInt() + ketQuaPhatHanh.SoHoaDon;
-				String keyHoaDon = ketQuaPhatHanh.idHoaDon;
+				String soHoaDonInput = ketQuaPhatHanh.soHoaDon;
+				String maTraCuuHoaDonInput = ketQuaPhatHanh.maTraCuuHoaDon;
+				String mauSoHoaDonInput = ketQuaPhatHanh.mauSoHoaDon;
+				String maSoDuThuongInput = randomInt() + ketQuaPhatHanh.soHoaDon;
+				String keyHoaDonInput = ketQuaPhatHanh.keyHoaDon;
 				String coQuanThueInput = objHD.NBan.coQuanThue;
 
-				String kq = TableHoaDon.taoDuLieu(objHD, keyHoaDon, soHoaDonInput, maHoaDonInput, maSoDuThuongInput, coQuanThueInput);
-				if (!kq.equals(maHoaDonInput)) Data.ghiLogRequest("Loi khi luu du lieu vao db: ");
+				String kq = TableHoaDon.taoDuLieu(objHD, keyHoaDonInput, soHoaDonInput, mauSoHoaDonInput, maTraCuuHoaDonInput, maSoDuThuongInput, coQuanThueInput);
+				if (!kq.equals(maTraCuuHoaDonInput)) Data.ghiLogRequest("Loi khi luu du lieu vao db: ");
 				ketQua.msgCode = ErrorCode.SUCCESS;
 				ketQua.msgContent = ErrorCode.MES_SUCCESS;
 				ketQua.result = ketQuaPhatHanh;
@@ -187,7 +188,6 @@ public class CMCFunc {
 			
 		}
 		catch (Exception e) {
-			
 			Data.ghiLogRequest("ApiPHanhHDon: Exception " + e.getMessage());
 		}		
 		return new Gson().toJson(ketQua);
@@ -211,6 +211,10 @@ public class CMCFunc {
 
 			if(ketQuaPhanTich.errorCode.equals("200"))
 			{
+				// Lay thong tin hoa don trong db where keyhoadon
+				ObjectHoaDon objectHoaDon = TableHoaDon.layDuLieu(objKeyHD.b_KeyHDon);
+				Data.ghiLogRequest("apiKyHDon: layThongTinHoaDonTrong DB" + objectHoaDon);
+
 				ketQua.msgCode = ErrorCode.SUCCESS;
 				ketQua.msgContent = ErrorCode.MES_SUCCESS;
 				ketQua.result = ketQuaPhanTich;
@@ -218,7 +222,7 @@ public class CMCFunc {
 				Data.ghiLogRequest("apiKyHDon: " +ketQuaPhanTich.errorCode + " " + ketQuaPhanTich.thongTinThem);
 				String xmlDuLieuSauKy = vn.vimass.utils.VimassCommon.getBase64(ketQuaPhanTich.thongTinThem);
 				// Luu du lieu
-				String XML_FILENAME = Data.FOLDER_XML_HOADON_CMC + "/" + ketQuaPhanTich.mauSoHoaDon.replace("/", ".") + "_"+ketQuaPhanTich.SoHoaDon;
+				String XML_FILENAME = Data.FOLDER_XML_HOADON_CMC + "/" + objectHoaDon.mauSoHoaDon.replace("/", ".") + "_" + objectHoaDon.soHoaDon;
 				Data.ghiLogRequest("XML_FILENAME: " + XML_FILENAME);
 				FileManager.writeFile(XML_FILENAME + ".xml", xmlDuLieuSauKy, false);
 				vn.vimass.utils.VimassCommon.delay(500);
@@ -312,7 +316,6 @@ public class CMCFunc {
 			}				
 		}
 		catch (Exception e) {
-			
 			Data.ghiLogRequest("ApiHuyHDon: Exception " + e.getMessage());
 		}		
 		return new Gson().toJson(ketQua);
@@ -348,7 +351,6 @@ public class CMCFunc {
 			}
 		}
 		catch (Exception e) {
-
 			Data.ghiLogRequest("ApiHuyHDon: Exception " + e.getMessage());
 		}
 		return new Gson().toJson(ketQua);
@@ -365,7 +367,7 @@ public class CMCFunc {
 		return nMua;
 	}
 
-	private static String guiEmailHoaDon(String NBan,String NMua,String soHoaDonInput,String maHoaDonInput,String maSoDuThuongInput,String linkPDFInput,String linkXMLInput,String emailKH)
+	private static String guiEmailHoaDon(String NBan,String NMua,String soHoaDonInput,String maTraCuuHoaDonInput,String maSoDuThuongInput,String linkPDFInput,String linkXMLInput,String emailKH)
 	{
 		String kq = "";
 		try {
@@ -386,7 +388,7 @@ public class CMCFunc {
 			objPost.emailKH = emailKH;
 			objPost.linkPDF = linkPDFInput;
 			objPost.linkXML = linkXMLInput;
-			objPost.maHoaDon = maHoaDonInput;
+			objPost.maTraCuuHoaDon = maTraCuuHoaDonInput;
 			objPost.maSoDuThuong = maSoDuThuongInput;
 			objPost.NBan = NBan;
 			objPost.NMua = NMua;
@@ -456,18 +458,18 @@ public class CMCFunc {
 							String[] temp = xml_Kq.split("#");
 							if(temp[0].equals("200"))
 							{						
-								// thanh cong
+								// Thanh cong   ex: [Code 200]#[Id bản ghi]#[Mẫu số hóa đơn].[Ký hiệu].[Số hóa đơn]#[Số tra cứu]
 								objKQ.errorCode = temp[0];
-								objKQ.idHoaDon = temp[1];
+								objKQ.keyHoaDon = temp[1];		// Id bản ghi
 								
-								String thongTinHD = temp[2];
-								if(thongTinHD!=null&&thongTinHD!="")
+								String thongTinHD = temp[2];	// [Mẫu số hóa đơn].[Ký hiệu].[Số hóa đơn]
+								if(thongTinHD!=null && thongTinHD!="")
 								{
 									String temp1 = thongTinHD.replace(".", "vmok");
 									String[] temp2 = temp1.split("vmok");
 									objKQ.mauSoHoaDon = temp2[0];
 									objKQ.kyHieuHoaDon = temp2[1];
-									objKQ.SoHoaDon = temp2[2];
+									objKQ.soHoaDon = temp2[2];
 								}
 								objKQ.maTraCuuHoaDon = temp[3];					
 							}						
@@ -547,7 +549,7 @@ public class CMCFunc {
 							{						
 								// Thanh cong
 								objKQ.errorCode = temp[0];
-								objKQ.idHoaDon = temp[1];
+								objKQ.keyHoaDon = temp[1];
 								
 								String thongTinHD = temp[2];
 								if(thongTinHD!=null&&thongTinHD!="")
@@ -556,7 +558,7 @@ public class CMCFunc {
 									String[] temp2 = temp1.split("vmok");
 									objKQ.mauSoHoaDon = temp2[0];
 									objKQ.kyHieuHoaDon = temp2[1];
-									objKQ.SoHoaDon = temp2[2];
+									objKQ.soHoaDon = temp2[2];
 								}
 								objKQ.maTraCuuHoaDon = temp[3];					
 							}						

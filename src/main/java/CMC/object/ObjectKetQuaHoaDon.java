@@ -5,10 +5,10 @@ import com.google.gson.GsonBuilder;
 
 public class ObjectKetQuaHoaDon {
 	public String errorCode = "";
-	public String idHoaDon = "";
+	public String keyHoaDon = "";			//
 	public String mauSoHoaDon = "";
 	public String kyHieuHoaDon = "";
-	public String SoHoaDon = "";
+	public String soHoaDon = "";
 	public String maTraCuuHoaDon = "";
 	public String thongTinThem = "";
 

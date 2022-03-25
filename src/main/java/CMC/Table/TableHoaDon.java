@@ -3,26 +3,28 @@ package CMC.Table;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Date;
 
+import CMC.object.ObjectHoaDon;
 import CMC.object.ObjectThongTinHoaDon;
-import CMC.object.ThongTinDonVi;
 import vn.vimass.csdl.utilDB.DbUtil;
 import vn.vimass.utils.Data;
 
 public class TableHoaDon {
 	
-	public static final String TABLE_NAME = "thongTinHoaDon";
-	
+	public static final String TABLE_NAME = "ThongTinHoaDon";
+
+	public static final String keyHoaDon = "keyHoaDon";				// PK
 	public static final String maSoThueNguoiBan = "maSoThueNguoiBan";
 	public static final String maSoThueNguoiMua = "maSoThueNguoiMua";
 	public static final String thoiGian = "thoiGian";
 	public static final String soHoaDon = "soHoaDon";
-	public static final String maHoaDon = "maHoaDon";
+	public static final String maTraCuuHoaDon = "maTraCuuHoaDon";
+	public static final String mauSoHoaDon = "mauSoHoaDon";
 	public static final String maSoDuThuong = "maSoDuThuong";
 	public static final String soTien = "soTien";
-	public static final String coQuanThue = "coQuanThue";	
-	public static final String keyHoaDon = "keyHoaDon";
+	public static final String coQuanThue = "coQuanThue";
 	public static final String linkPDF = "linkPDF";
 	public static final String linkXML = "linkXML";
 	public static final String dsHHDV = "dsHHDV";
@@ -59,9 +61,52 @@ public class TableHoaDon {
 //		return item;
 //	}
 //	
-	
-	public static String taoDuLieu(ObjectThongTinHoaDon item, String keyHoaDonInput, String soHoaDonInput,
-			String maHoaDonInput, String maSoDuThuongInput, String coQuanThueInput, String linkPDFInput, String linkXMLInput)
+
+	public static ObjectHoaDon layDuLieu(String keyHoaDonInput)
+	{
+		String TAG = "TableHoaDon-layDuLieu";
+		ObjectHoaDon idKQ = null;
+		try {
+			String strSqlSelect = "SELECT * FROM " + TABLE_NAME;
+			strSqlSelect += " WHERE "
+									+ keyHoaDon + " = '" + keyHoaDonInput + "'"
+									+ ";";
+
+			Data.ghiLogRequest(TAG + "\tselect:" + strSqlSelect);
+
+			Connection connect = null;
+			Statement statement = null;
+
+			connect = DbUtil.getConnect(DbUtil.URL, DbUtil.USER, DbUtil.PASS);
+			statement = connect.createStatement();;
+
+			ResultSet rs = statement.executeQuery(strSqlSelect);
+
+			ObjectHoaDon objectHoaDon = new ObjectHoaDon();
+			while (rs.next()) {
+				objectHoaDon.keyHoaDon = rs.getString("keyHoaDon");
+				objectHoaDon.soHoaDon = rs.getString("soHoaDon");
+				objectHoaDon.mauSoHoaDon = rs.getString("mauSoHoaDon");
+				objectHoaDon.maTraCuuHoaDon = rs.getString("maTraCuuHoaDon");
+				objectHoaDon.maSoDuThuong = rs.getString("maSoDuThuong");
+				objectHoaDon.linkPDF = rs.getString("linkPDF");
+				objectHoaDon.linkXML = rs.getString("linkXML");
+
+			}
+			Data.ghiLogRequest(TAG + "\tkq:" + objectHoaDon);
+			if (!objectHoaDon.keyHoaDon.equals("")) {
+				idKQ = objectHoaDon;
+			} else {
+				Data.ghiLogRequest(TAG + "\tLoi========");
+			}
+		} catch (Exception e) {
+			Data.ghiLogRequest(TAG + "\tLoi========" + e.getMessage());
+		}
+		return idKQ;
+	}
+
+	public static String taoDuLieu(ObjectThongTinHoaDon item, String keyHoaDonInput, String soHoaDonInput, String mauSoHoaDonInput,
+			String maTraCuuHoaDonInput, String maSoDuThuongInput, String coQuanThueInput, String linkPDFInput, String linkXMLInput)
 	{
 		String TAG = "TableHoaDon-taoDuLieu";
 		String idKQ = "";
@@ -73,11 +118,12 @@ public class TableHoaDon {
 					+ maSoThueNguoiMua + ", "
 					+ thoiGian + ", "
 					+ maSoThueNguoiBan + ", "
-					+ maHoaDon + ", "
+					+ maTraCuuHoaDon + ", "
 					+ maSoDuThuong + ", "
 					+ soTien + ", "
-					+ coQuanThue + ", "	
+					+ coQuanThue + ", "
 					+ soHoaDon+ ", "
+					+ mauSoHoaDon+ ", "
 					+ linkPDF + ", "
 					+ linkXML + ", "
 					+ dsHHDV 
@@ -86,11 +132,12 @@ public class TableHoaDon {
 					+ "N'" + item.NMua.maSoThue + "',"
 					+ timenow + ","
 					+ "N'" + item.NBan.maSoThue + "',"					
-					+ "N'" + maHoaDonInput + "',"
+					+ "N'" + maTraCuuHoaDonInput + "',"
 					+ "N'" + maSoDuThuongInput + "',"
 					+ item.listHHDV.get(0).tgTien + ","
-					+ "N'" + coQuanThueInput + "',"					
+					+ "N'" + coQuanThueInput + "',"
 					+ "N'" + soHoaDonInput + "',"
+					+ "N'" + mauSoHoaDonInput + "',"
 					+ "N'" + linkPDFInput + "',"
 					+ "N'" + linkXMLInput + "',"
 					+ "N'" + item.getListHHDV() + "'"
@@ -107,7 +154,7 @@ public class TableHoaDon {
 			int kq = statement.executeUpdate();
 			Data.ghiLogRequest(TAG + "\tkq:" + kq);
 			if (kq > 0) {
-				idKQ = maHoaDonInput;
+				idKQ = keyHoaDonInput;
 			} else {
 				Data.ghiLogRequest(TAG + "\tLoi========");
 			}
@@ -117,8 +164,8 @@ public class TableHoaDon {
 		return idKQ;
 	}
 
-	public static String taoDuLieu(ObjectThongTinHoaDon item, String keyHoaDonInput, String soHoaDonInput,
-								   String maHoaDonInput, String maSoDuThuongInput, String coQuanThueInput)
+	public static String taoDuLieu(ObjectThongTinHoaDon item, String keyHoaDonInput, String soHoaDonInput, String mauSoHoaDonInput,
+								   String maTraCuuHoaDonInput, String maSoDuThuongInput, String coQuanThueInput)
 	{
 		String TAG = "TableHoaDon-taoDuLieu";
 		String idKQ = "";
@@ -130,22 +177,24 @@ public class TableHoaDon {
 										  + maSoThueNguoiMua + ", "
 										  + thoiGian + ", "
 										  + maSoThueNguoiBan + ", "
-										  + maHoaDon + ", "
+										  + maTraCuuHoaDon + ", "
 										  + maSoDuThuong + ", "
 										  + soTien + ", "
 										  + coQuanThue + ", "
 										  + soHoaDon+ ", "
+										  + mauSoHoaDon+ ", "
 										  + dsHHDV
 										  + " ) VALUES ("
 										  + "N'" + keyHoaDonInput + "',"
 										  + "N'" + item.NMua.maSoThue + "',"
 										  + timenow + ","
 										  + "N'" + item.NBan.maSoThue + "',"
-										  + "N'" + maHoaDonInput + "',"
+										  + "N'" + maTraCuuHoaDonInput + "',"
 										  + "N'" + maSoDuThuongInput + "',"
 										  + item.listHHDV.get(0).tgTien + ","
 										  + "N'" + coQuanThueInput + "',"
 										  + "N'" + soHoaDonInput + "',"
+										  + "N'" + mauSoHoaDonInput + "',"
 										  + "N'" + item.getListHHDV() + "'"
 										  + ");";
 
@@ -160,7 +209,7 @@ public class TableHoaDon {
 			int kq = statement.executeUpdate();
 			Data.ghiLogRequest(TAG + "\tkq:" + kq);
 			if (kq > 0) {
-				idKQ = maHoaDonInput;
+				idKQ = keyHoaDonInput;
 			} else {
 				Data.ghiLogRequest(TAG + "\tLoi========");
 			}
@@ -170,7 +219,7 @@ public class TableHoaDon {
 		return idKQ;
 	}
 
-	public static String themLinkXML(String maHoaDo, String linkXMLInput)
+	public static String themLinkXML(String keyHoaDonInput, String linkXMLInput)
 	{
 		String TAG = "TableHoaDon-taoDuLieu";
 		String idKQ = "";
@@ -179,7 +228,7 @@ public class TableHoaDon {
 			String strSqlUpdate = "UPDATE " + TABLE_NAME  + " SET "
 										  + linkXML + " = N'" +linkXMLInput + "'";
 			strSqlUpdate += " WHERE "
-									+ maHoaDon + " = '" + maHoaDo + "'"
+									+ keyHoaDon + " = '" + keyHoaDonInput + "'"
 									+ ";";
 
 			Data.ghiLogRequest(TAG + "\tupdate:" + strSqlUpdate);
@@ -193,7 +242,7 @@ public class TableHoaDon {
 			int kq = statement.executeUpdate();
 			Data.ghiLogRequest(TAG + "\tkq:" + kq);
 			if (kq > 0) {
-				idKQ = maHoaDo;
+				idKQ = keyHoaDonInput;
 			} else {
 				Data.ghiLogRequest(TAG + "\tLoi========");
 			}
@@ -203,7 +252,7 @@ public class TableHoaDon {
 		return idKQ;
 	}
 
-	public static String themLinkPDF(String maHoaDo, String linkPDFInput)
+	public static String themLinkPDF(String keyHoaDonInput, String linkPDFInput)
 	{
 		String TAG = "TableHoaDon-taoDuLieu";
 		String idKQ = "";
@@ -212,7 +261,7 @@ public class TableHoaDon {
 			String strSqlUpdate = "UPDATE " + TABLE_NAME  + " SET "
 										  + linkPDF + " = N'" + linkPDFInput + "'";
 			strSqlUpdate += " WHERE "
-									+ maHoaDon + " = '" + maHoaDo + "'"
+									+ keyHoaDon + " = '" + keyHoaDonInput + "'"
 									+ ";";
 
 			Data.ghiLogRequest(TAG + "\tupdate:" + strSqlUpdate);
@@ -226,7 +275,7 @@ public class TableHoaDon {
 			int kq = statement.executeUpdate();
 			Data.ghiLogRequest(TAG + "\tkq:" + kq);
 			if (kq > 0) {
-				idKQ = maHoaDo;
+				idKQ = keyHoaDonInput;
 			} else {
 				Data.ghiLogRequest(TAG + "\tLoi========");
 			}

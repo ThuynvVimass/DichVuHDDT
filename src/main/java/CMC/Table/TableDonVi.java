@@ -12,7 +12,7 @@ import vn.vimass.utils.Data;
 
 public class TableDonVi {
 	
-	public static final String TABLE_NAME = "thongTinDonVi";
+	public static final String TABLE_NAME = "ThongTinDonVi";
 	
 	public static final String maSoThue = "maSoThue";
 	public static final String trangThai = "trangThai";
