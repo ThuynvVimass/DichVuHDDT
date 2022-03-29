@@ -16,7 +16,10 @@ public class ObjectHoaDon {
 	public String linkXML;
 	public String emailKH;
 	public String checkSum;
-	
+	public String tenDoangNghiepBan;
+	public String tenDoangNghiepMua;
+	public String emailNguoiMua;
+
 	@Override
 	public String toString() {
 		Gson gson = new GsonBuilder()

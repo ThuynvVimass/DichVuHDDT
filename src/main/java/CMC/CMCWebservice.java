@@ -59,8 +59,8 @@ public class CMCWebservice {
 	}
 	
 	@POST
-	@Path("/inInvoices")
-	public String inInvoices(String input) {
+	@Path("/printInvoices")
+	public String printInvoices(String input) {
 		Data.ghiLogRequest("IP:" + request.getRemoteAddr());
 		return CMCFunc.inHoaDon (input);		
 	}

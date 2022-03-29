@@ -101,13 +101,15 @@ public class CMCFunc {
 								String coQuanThueInput = objHD.NBan.coQuanThue;
 								String linkPDFInput = ketQuaInHoaDon.thongTinThem;
 								String linkXMLInput = XML_FILENAME + ".xml";
-								String kq = TableHoaDon.taoDuLieu(objHD, keyHoaDon, soHoaDonInput, mauSoHoaDonInput, maTraCuuHoaDonInput, maSoDuThuongInput, coQuanThueInput, linkPDFInput, linkXMLInput);
+								String kq = TableHoaDon.taoDuLieu(objHD, keyHoaDon, soHoaDonInput, mauSoHoaDonInput, maTraCuuHoaDonInput,
+										maSoDuThuongInput, coQuanThueInput, linkPDFInput, linkXMLInput);
 								if(kq!="")
 								{
 									ketQua.result = ketQuaPhatHanh;
 									ketQua.msgCode = ErrorCode.SUCCESS;
 									ketQua.msgContent = ErrorCode.MES_SUCCESS;
-									guiEmailHoaDon(objHD.NBan.tenDoanhNghiep,objHD.NMua.tenDoanhNghiep, soHoaDonInput, maTraCuuHoaDonInput, maSoDuThuongInput, linkPDFInput, linkXMLInput, objHD.EmailNMua);
+									guiEmailHoaDon(objHD.NBan.tenDoanhNghiep,objHD.NMua.tenDoanhNghiep, soHoaDonInput, maTraCuuHoaDonInput,
+											maSoDuThuongInput, linkPDFInput, linkXMLInput, objHD.EmailNMua);
 								}
 							}
 							else {
@@ -176,7 +178,8 @@ public class CMCFunc {
 				String keyHoaDonInput = ketQuaPhatHanh.keyHoaDon;
 				String coQuanThueInput = objHD.NBan.coQuanThue;
 
-				String kq = TableHoaDon.taoDuLieu(objHD, keyHoaDonInput, soHoaDonInput, mauSoHoaDonInput, maTraCuuHoaDonInput, maSoDuThuongInput, coQuanThueInput);
+				String kq = TableHoaDon.taoDuLieu(objHD, keyHoaDonInput, soHoaDonInput, mauSoHoaDonInput,
+						maTraCuuHoaDonInput, maSoDuThuongInput, coQuanThueInput);
 				if (!kq.equals(maTraCuuHoaDonInput)) Data.ghiLogRequest("Loi khi luu du lieu vao db: ");
 				ketQua.msgCode = ErrorCode.SUCCESS;
 				ketQua.msgContent = ErrorCode.MES_SUCCESS;
@@ -266,6 +269,10 @@ public class CMCFunc {
 			ObjectKetQuaHoaDon ketQuaInHoaDon = phanTichKetQua(inHoaDon_response,"apiInHoadon");
 			if(ketQuaInHoaDon.errorCode.equals("200"))
 			{
+				// Lay thong tin hoa don trong db where keyhoadon
+				ObjectHoaDon objectHoaDon = TableHoaDon.layDuLieu(objKeyHD.b_KeyHDon);
+				Data.ghiLogRequest("apiKyHDon: layThongTinHoaDonTrong DB" + objectHoaDon);
+
 				Data.ghiLogRequest("apiInHoadon:kq " +ketQuaInHoaDon.errorCode + " " + ketQuaInHoaDon.thongTinThem);
 				// Luu du lieu hoa don
 				String linkPDFInput = ketQuaInHoaDon.thongTinThem;
@@ -275,7 +282,8 @@ public class CMCFunc {
 					ketQua.result = ketQuaInHoaDon;
 					ketQua.msgCode = ErrorCode.SUCCESS;
 					ketQua.msgContent = ErrorCode.MES_SUCCESS;
-//					guiEmailHoaDon(objHD.NBan.tenDoanhNghiep, objHD.NMua.tenDoanhNghiep, soHoaDonInput, maHoaDonInput, maSoDuThuongInput, linkPDFInput, linkXMLInput,objHD.EmailNMua);
+					guiEmailHoaDon(objectHoaDon.tenDoangNghiepBan, objectHoaDon.tenDoangNghiepMua, objectHoaDon.soHoaDon,
+							objectHoaDon.maTraCuuHoaDon, objectHoaDon.maSoDuThuong, linkPDFInput, objectHoaDon.linkXML, objectHoaDon.emailNguoiMua);
 				}
 			}
 			else {
@@ -367,7 +375,8 @@ public class CMCFunc {
 		return nMua;
 	}
 
-	private static String guiEmailHoaDon(String NBan,String NMua,String soHoaDonInput,String maTraCuuHoaDonInput,String maSoDuThuongInput,String linkPDFInput,String linkXMLInput,String emailKH)
+	private static String guiEmailHoaDon(String NBan, String NMua, String soHoaDonInput, String maTraCuuHoaDonInput,
+										 String maSoDuThuongInput, String linkPDFInput, String linkXMLInput, String emailKH)
 	{
 		String kq = "";
 		try {
@@ -400,11 +409,9 @@ public class CMCFunc {
 			{
 				Data.ghiLogRequest("guiEmailHoaDon: ThanhCong " + kq);
 			}
-			
 		}catch (Exception e) {
 			Data.ghiLogRequest("guiEmailHoaDon: Loi " + soHoaDonInput);
 		}
-		
 		return kq;
 	}
 	

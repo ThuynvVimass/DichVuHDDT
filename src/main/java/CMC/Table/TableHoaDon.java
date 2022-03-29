@@ -28,6 +28,9 @@ public class TableHoaDon {
 	public static final String linkPDF = "linkPDF";
 	public static final String linkXML = "linkXML";
 	public static final String dsHHDV = "dsHHDV";
+	public static final String tenDoangNghiepMua = "tenDoangNghiepMua";
+	public static final String tenDoangNghiepBan = "tenDoangNghiepBan";
+	public static final String emailNguoiMua = "emailNguoiMua";
 	
 
 //	private static thongTinDonVi getValue(ResultSet resultSet) {
@@ -91,6 +94,9 @@ public class TableHoaDon {
 				objectHoaDon.maSoDuThuong = rs.getString("maSoDuThuong");
 				objectHoaDon.linkPDF = rs.getString("linkPDF");
 				objectHoaDon.linkXML = rs.getString("linkXML");
+				objectHoaDon.tenDoangNghiepMua = rs.getString("tenDoangNghiepMua");
+				objectHoaDon.tenDoangNghiepBan = rs.getString("tenDoangNghiepBan");
+				objectHoaDon.emailNguoiMua = rs.getString("emailNguoiMua");
 
 			}
 			Data.ghiLogRequest(TAG + "\tkq:" + objectHoaDon);
@@ -126,8 +132,11 @@ public class TableHoaDon {
 					+ mauSoHoaDon+ ", "
 					+ linkPDF + ", "
 					+ linkXML + ", "
-					+ dsHHDV 
-					+ " ) VALUES ("
+					+ dsHHDV  + ", "
+				    + tenDoangNghiepMua + ", "
+				  	+ tenDoangNghiepBan + ", "
+				  	+ emailNguoiMua
+				  	+ " ) VALUES ("
 					+ "N'" + keyHoaDonInput + "',"
 					+ "N'" + item.NMua.maSoThue + "',"
 					+ timenow + ","
@@ -140,7 +149,10 @@ public class TableHoaDon {
 					+ "N'" + mauSoHoaDonInput + "',"
 					+ "N'" + linkPDFInput + "',"
 					+ "N'" + linkXMLInput + "',"
-					+ "N'" + item.getListHHDV() + "'"
+					+ "N'" + item.getListHHDV() + "',"
+				  	+ "N'" +  item.NBan.tenDoanhNghiep + "',"
+				  	+ "N'" +  item.NMua.tenDoanhNghiep + "',"
+				  	+ "N'" + item.EmailNMua + "'"
 					+ ");";
 			
 			Data.ghiLogRequest(TAG + "\tinsert:" + strSqlInsert);
@@ -183,7 +195,10 @@ public class TableHoaDon {
 										  + coQuanThue + ", "
 										  + soHoaDon+ ", "
 										  + mauSoHoaDon+ ", "
-										  + dsHHDV
+										  + dsHHDV  + ", "
+										  + tenDoangNghiepMua + ", "
+										  + tenDoangNghiepBan + ", "
+										  + emailNguoiMua
 										  + " ) VALUES ("
 										  + "N'" + keyHoaDonInput + "',"
 										  + "N'" + item.NMua.maSoThue + "',"
@@ -195,7 +210,10 @@ public class TableHoaDon {
 										  + "N'" + coQuanThueInput + "',"
 										  + "N'" + soHoaDonInput + "',"
 										  + "N'" + mauSoHoaDonInput + "',"
-										  + "N'" + item.getListHHDV() + "'"
+										  + "N'" + item.getListHHDV() + "',"
+										  + "N'" +  item.NBan.tenDoanhNghiep + "',"
+										  + "N'" + item.NMua.tenDoanhNghiep + "',"
+										  + "N'" + item.EmailNMua + "'"
 										  + ");";
 
 			Data.ghiLogRequest(TAG + "\tinsert:" + strSqlInsert);
