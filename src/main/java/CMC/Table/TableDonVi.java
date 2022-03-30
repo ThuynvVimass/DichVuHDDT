@@ -29,42 +29,9 @@ public class TableDonVi {
 	public static final String maxHD = "maxHD";
 	public static final String banQuyen = "banQuyen";
 	public static final String goiHoaDon = "goiHoaDon";
-	
 	public static final String password = "password";
 	public static final String user = "user";
 
-//	private static thongTinDonVi getValue(ResultSet resultSet) {
-//		thongTinDonVi item = new thongTinDonVi();
-//		
-//		try
-//		{
-//			item.maGiaoDich = resultSet.getString(maGiaoDich);
-//			item.trans_id = resultSet.getString(trans_id);
-//			item.trans_date = resultSet.getString(trans_date);
-//			
-//			
-//			item.customer_id = resultSet.getString(customer_id);
-//
-//			item.service_id = resultSet.getString(service_id);
-//
-//			item.bill_id = resultSet.getString(bill_id);
-//
-//			item.amount = resultSet.getInt(amount);
-//
-//			
-//			item.timeCreate = resultSet.getLong(timeCreate);
-//			item.cks = resultSet.getString(cks);
-//			
-//		}
-//		catch(Exception e)
-//		{
-//			
-//		}
-//		
-//		return item;
-//	}
-//	
-	
 	public static String taoDuLieuDonVi(ThongTinDonVi item) {
 		String TAG = "taoDuLieuDonVi=========";
 		String idKQ = "";
