@@ -64,7 +64,14 @@ public class CMCWebservice {
 		Data.ghiLogRequest("IP:" + request.getRemoteAddr());
 		return CMCFunc.inHoaDon (input);		
 	}
-	
+
+	@POST
+	@Path("/apprsAndPrintInvoices")
+	public String apprsAndPrintInvoices(String input) {
+		Data.ghiLogRequest("IP:" + request.getRemoteAddr());
+		return CMCFunc.kyDuyetVaInHoaDon (input);
+	}
+
 	@POST
 	@Path("/canceInvoices")
 	public String canceInvoices(String input) {
@@ -85,16 +92,5 @@ public class CMCWebservice {
 		Data.ghiLogRequest("IP:" + request.getRemoteAddr());
 		return CMCFunc.getThongTinDonViBangMST(input);		
 	}
-	
-	
-//	@Path("/getInquiryBIDV")
-//	@GET
-//	public String getInquiryBIDV(@QueryParam("transId") String transId) {
-//				
-//		Data.ghiLogRequest("----------getInquiryBIDV-----------"); 
-//		
-//		return CMCFunc.getInquiryBIDV(transId);
-//	}
-	
 	
 }

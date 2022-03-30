@@ -18,7 +18,6 @@ public class ObjectHoaDon {
 	public String checkSum;
 	public String tenDoangNghiepBan;
 	public String tenDoangNghiepMua;
-	public String emailNguoiMua;
 
 	@Override
 	public String toString() {

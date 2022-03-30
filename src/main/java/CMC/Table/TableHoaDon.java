@@ -30,7 +30,7 @@ public class TableHoaDon {
 	public static final String dsHHDV = "dsHHDV";
 	public static final String tenDoangNghiepMua = "tenDoangNghiepMua";
 	public static final String tenDoangNghiepBan = "tenDoangNghiepBan";
-	public static final String emailNguoiMua = "emailNguoiMua";
+	public static final String emailKH = "emailKH";
 	
 
 //	private static thongTinDonVi getValue(ResultSet resultSet) {
@@ -96,7 +96,7 @@ public class TableHoaDon {
 				objectHoaDon.linkXML = rs.getString("linkXML");
 				objectHoaDon.tenDoangNghiepMua = rs.getString("tenDoangNghiepMua");
 				objectHoaDon.tenDoangNghiepBan = rs.getString("tenDoangNghiepBan");
-				objectHoaDon.emailNguoiMua = rs.getString("emailNguoiMua");
+				objectHoaDon.emailKH = rs.getString("emailKH");
 
 			}
 			Data.ghiLogRequest(TAG + "\tkq:" + objectHoaDon);
@@ -133,9 +133,9 @@ public class TableHoaDon {
 					+ linkPDF + ", "
 					+ linkXML + ", "
 					+ dsHHDV  + ", "
-				    + tenDoangNghiepMua + ", "
-				  	+ tenDoangNghiepBan + ", "
-				  	+ emailNguoiMua
+				    + tenDoangNghiepBan + ", "
+				  	+ tenDoangNghiepMua + ", "
+				  	+ emailKH
 				  	+ " ) VALUES ("
 					+ "N'" + keyHoaDonInput + "',"
 					+ "N'" + item.NMua.maSoThue + "',"
@@ -196,9 +196,9 @@ public class TableHoaDon {
 										  + soHoaDon+ ", "
 										  + mauSoHoaDon+ ", "
 										  + dsHHDV  + ", "
-										  + tenDoangNghiepMua + ", "
 										  + tenDoangNghiepBan + ", "
-										  + emailNguoiMua
+										  + tenDoangNghiepMua + ", "
+										  + emailKH
 										  + " ) VALUES ("
 										  + "N'" + keyHoaDonInput + "',"
 										  + "N'" + item.NMua.maSoThue + "',"
@@ -270,13 +270,47 @@ public class TableHoaDon {
 		return idKQ;
 	}
 
-	public static String themLinkPDF(String keyHoaDonInput, String linkPDFInput)
+	public static String themlink(String keyHoaDonInput, String linkPDFInput)
 	{
 		String TAG = "TableHoaDon-taoDuLieu";
 		String idKQ = "";
 		long timenow = new Date().getTime();
 		try {
 			String strSqlUpdate = "UPDATE " + TABLE_NAME  + " SET "
+										  + linkPDF + " = N'" + linkPDFInput + "'";
+			strSqlUpdate += " WHERE "
+									+ keyHoaDon + " = '" + keyHoaDonInput + "'"
+									+ ";";
+
+			Data.ghiLogRequest(TAG + "\tupdate:" + strSqlUpdate);
+
+			PreparedStatement statement = null;
+			Connection connect = null;
+
+			connect = DbUtil.getConnect(DbUtil.URL, DbUtil.USER, DbUtil.PASS);
+			statement = (PreparedStatement) connect
+					.prepareStatement(strSqlUpdate);
+			int kq = statement.executeUpdate();
+			Data.ghiLogRequest(TAG + "\tkq:" + kq);
+			if (kq > 0) {
+				idKQ = keyHoaDonInput;
+			} else {
+				Data.ghiLogRequest(TAG + "\tLoi========");
+			}
+		} catch (Exception e) {
+			Data.ghiLogRequest(TAG + "\tLoi========" + e.getMessage());
+		}
+		return idKQ;
+	}
+
+	public static String themlink(String keyHoaDonInput, String linkXMLInput, String linkPDFInput)
+	{
+		String TAG = "TableHoaDon-taoDuLieu";
+		String idKQ = "";
+		long timenow = new Date().getTime();
+		try {
+			String strSqlUpdate = "UPDATE " + TABLE_NAME  + " SET "
+										  + linkXML + " = N'" + linkXMLInput + "', "
 										  + linkPDF + " = N'" + linkPDFInput + "'";
 			strSqlUpdate += " WHERE "
 									+ keyHoaDon + " = '" + keyHoaDonInput + "'"
