@@ -39,43 +39,43 @@ public class TableDonVi {
 		try {
 			
 			String strSqlInsert = "INSERT INTO " + TABLE_NAME + ""
-					+ " ("
-					+ maSoThue + ", "
-					+ trangThai + ", "
-					+ thoiGian + ", "
-					+ maNhaCungCap + ", "
-					+ tenDoanhNghiep + ", "
-					+ tenGiaoDich + ", "							
-					+ diaChi + ", "
-					+ coQuanThue + ", "
-							+ coQuanThueCapCuc + ", "
-					+ maSoHoaDon + ", "
-					+ kyHieuHoaDon + ", "
-					+ checkSum + ", "
-					+ maxHD + ", "
-						+ banQuyen + ", "
-						+ goiHoaDon + ", "
-					+ password + ", "
-					+ user
-					+ " ) VALUES ("
-					+ "N'" + item.maSoThue + "',"
-					+ item.trangThai + ","
-					+ item.thoiGian + ","
-					+ "N'" + item.maNhaCungCap + "',"
-					+ "N'" + item.tenDoanhNghiep + "',"
-					+ "N'" + item.tenGiaoDich + "',"
-					+ "N'" + item.diaChi + "',"
-					+ "N'" + item.coQuanThue + "',"
-							+ "N'" + item.coQuanThueCapCuc + "',"
-					+ "N'" + item.maSoHoaDon + "',"
-					+ "N'" + item.kyHieuHoaDon + "',"
-					+ "N'" + checkSum1 + "',"
-					+ item.maxHD + ","
-							+ "N'" + item.banQuyen + "',"
-							+ "N'" + item.goiHoaDon + "',"
-					+ "N'" + item.user + "',"
-					+ "N'" + item.password + "'"
-					+ ");";
+										  + " ("
+										  + maSoThue + ", "
+										  + trangThai + ", "
+										  + thoiGian + ", "
+										  + maNhaCungCap + ", "
+										  + tenDoanhNghiep + ", "
+										  + tenGiaoDich + ", "
+										  + diaChi + ", "
+										  + coQuanThue + ", "
+										  + coQuanThueCapCuc + ", "
+										  + maSoHoaDon + ", "
+										  + kyHieuHoaDon + ", "
+										  + checkSum + ", "
+										  + maxHD + ", "
+										  + banQuyen + ", "
+										  + goiHoaDon + ", "
+										  + password + ", "
+										  + user
+										  + " ) VALUES ("
+										  + "N'" + item.maSoThue + "',"
+										  + item.trangThai + ","
+										  + item.thoiGian + ","
+										  + "N'" + item.maNhaCungCap + "',"
+										  + "N'" + item.tenDoanhNghiep + "',"
+										  + "N'" + item.tenGiaoDich + "',"
+										  + "N'" + item.diaChi + "',"
+										  + "N'" + item.coQuanThue + "',"
+										  + "N'" + item.coQuanThueCapCuc + "',"
+										  + "N'" + item.maSoHoaDon + "',"
+										  + "N'" + item.kyHieuHoaDon + "',"
+										  + "N'" + checkSum1 + "',"
+										  + item.maxHD + ","
+										  + "N'" + item.banQuyen + "',"
+										  + "N'" + item.goiHoaDon + "',"
+										  + "N'" + item.user + "',"
+										  + "N'" + item.password + "'"
+										  + ");";
 			
 			Data.ghiLogRequest(TAG + "\tinsert:" + strSqlInsert);
 			
@@ -126,11 +126,11 @@ public class TableDonVi {
 					kq.tenGiaoDich = resultSet.getString(tenGiaoDich);
 					kq.diaChi = resultSet.getString(diaChi);
 					kq.coQuanThue = resultSet.getString(coQuanThue);
-						kq.coQuanThueCapCuc = resultSet.getString(coQuanThueCapCuc);
+					kq.coQuanThueCapCuc = resultSet.getString(coQuanThueCapCuc);
 					kq.maSoHoaDon = resultSet.getString(maSoHoaDon);
 					kq.kyHieuHoaDon = resultSet.getString(kyHieuHoaDon);
-						kq.banQuyen = resultSet.getString(banQuyen);
-						kq.goiHoaDon = resultSet.getString(goiHoaDon);
+					kq.banQuyen = resultSet.getString(banQuyen);
+					kq.goiHoaDon = resultSet.getString(goiHoaDon);
 					kq.user = resultSet.getString(user);
 					kq.password = resultSet.getString(password);																			
 				}
@@ -156,26 +156,26 @@ public class TableDonVi {
 		try {
 			
 			String strSqlUpdate = "UPDATE " + TABLE_NAME + " SET "
-					+ trangThai + " = " + item.trangThai + ", "
-					+ thoiGian + " = " + item.thoiGian + ", "
-					+ maNhaCungCap + " = N'" + item.maNhaCungCap + "', "
-					+ tenDoanhNghiep + " = N'" + item.tenDoanhNghiep + "', "
-					+ tenGiaoDich + " = N'" + item.tenGiaoDich + "', "							
-					+ diaChi + " = N'" + item.diaChi + "', "
-					+ coQuanThue + " = N'" + item.coQuanThue + "', "
-							+ coQuanThueCapCuc + " = N'" + item.coQuanThueCapCuc + "', "
-					+ maSoHoaDon + " = N'" + item.maSoHoaDon + "', "
-					+ kyHieuHoaDon+  " = N'" + item.kyHieuHoaDon + "', "
-					+ checkSum + " = N'" + checkSum1 + "', "
-					+ maxHD + " = " + item.maxHD + ", "
-							+ banQuyen + " = N'" + item.banQuyen + "', "
-							+ goiHoaDon + " = N'" + item.goiHoaDon + "', "
-					+ password + " = N'" + item.password + "', "
-					+ user + " = N'" + item.user + "'";
+										  + trangThai + " = " + item.trangThai + ", "
+										  + thoiGian + " = " + item.thoiGian + ", "
+										  + maNhaCungCap + " = N'" + item.maNhaCungCap + "', "
+										  + tenDoanhNghiep + " = N'" + item.tenDoanhNghiep + "', "
+										  + tenGiaoDich + " = N'" + item.tenGiaoDich + "', "
+										  + diaChi + " = N'" + item.diaChi + "', "
+										  + coQuanThue + " = N'" + item.coQuanThue + "', "
+										  + coQuanThueCapCuc + " = N'" + item.coQuanThueCapCuc + "', "
+										  + maSoHoaDon + " = N'" + item.maSoHoaDon + "', "
+										  + kyHieuHoaDon+  " = N'" + item.kyHieuHoaDon + "', "
+										  + checkSum + " = N'" + checkSum1 + "', "
+										  + maxHD + " = " + item.maxHD + ", "
+										  + banQuyen + " = N'" + item.banQuyen + "', "
+										  + goiHoaDon + " = N'" + item.goiHoaDon + "', "
+										  + password + " = N'" + item.password + "', "
+										  + user + " = N'" + item.user + "'";
 							
 			strSqlUpdate += " WHERE "
-					+ maSoThue + " = '" + item.maSoThue + "'"
-					+ ";";
+									+ maSoThue + " = '" + item.maSoThue + "'"
+									+ ";";
 			
 			Data.ghiLogRequest(TAG + "\tupdate:" + strSqlUpdate);
 			
@@ -188,7 +188,6 @@ public class TableDonVi {
 			int kq = statement.executeUpdate();
 			Data.ghiLogRequest(TAG + "\tkq:" + kq);
 			if (kq > 0) {
-				
 				idKQ = item.maSoThue;
 			} else {
 				Data.ghiLogRequest(TAG + "\tLoi========");

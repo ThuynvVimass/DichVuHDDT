@@ -3,8 +3,8 @@ package FPT.object;
 import com.google.gson.Gson;
 
 public class Item{
-    public int line = 1;
-    public String type = "";
+    public int line;
+    public String type = "";        // hinhThucHangHoa
     public String vrt = "";
     public String code = "";
     public String name = "";

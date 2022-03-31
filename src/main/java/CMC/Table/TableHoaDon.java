@@ -119,41 +119,41 @@ public class TableHoaDon {
 		long timenow = new Date().getTime();
 		try {
 			String strSqlInsert = "INSERT INTO " + TABLE_NAME + ""
-					+ " ("
-					+ keyHoaDon + ", "						
-					+ maSoThueNguoiMua + ", "
-					+ thoiGian + ", "
-					+ maSoThueNguoiBan + ", "
-					+ maTraCuuHoaDon + ", "
-					+ maSoDuThuong + ", "
-					+ soTien + ", "
-					+ coQuanThue + ", "
-					+ soHoaDon+ ", "
-					+ mauSoHoaDon+ ", "
-					+ linkPDF + ", "
-					+ linkXML + ", "
-					+ dsHHDV  + ", "
-				    + tenDoangNghiepBan + ", "
-				  	+ tenDoangNghiepMua + ", "
-				  	+ emailKH
-				  	+ " ) VALUES ("
-					+ "N'" + keyHoaDonInput + "',"
-					+ "N'" + item.NMua.maSoThue + "',"
-					+ timenow + ","
-					+ "N'" + item.NBan.maSoThue + "',"					
-					+ "N'" + maTraCuuHoaDonInput + "',"
-					+ "N'" + maSoDuThuongInput + "',"
-					+ item.listHHDV.get(0).tgTien + ","
-					+ "N'" + coQuanThueInput + "',"
-					+ "N'" + soHoaDonInput + "',"
-					+ "N'" + mauSoHoaDonInput + "',"
-					+ "N'" + linkPDFInput + "',"
-					+ "N'" + linkXMLInput + "',"
-					+ "N'" + item.getListHHDV() + "',"
-				  	+ "N'" +  item.NBan.tenDoanhNghiep + "',"
-				  	+ "N'" +  item.NMua.tenDoanhNghiep + "',"
-				  	+ "N'" + item.EmailNMua + "'"
-					+ ");";
+										  + " ("
+										  + keyHoaDon + ", "
+										  + maSoThueNguoiMua + ", "
+										  + thoiGian + ", "
+										  + maSoThueNguoiBan + ", "
+										  + maTraCuuHoaDon + ", "
+										  + maSoDuThuong + ", "
+										  + soTien + ", "
+										  + coQuanThue + ", "
+										  + soHoaDon+ ", "
+										  + mauSoHoaDon+ ", "
+										  + linkPDF + ", "
+										  + linkXML + ", "
+										  + dsHHDV  + ", "
+										  + tenDoangNghiepBan + ", "
+										  + tenDoangNghiepMua + ", "
+										  + emailKH
+										  + " ) VALUES ("
+										  + "N'" + keyHoaDonInput + "',"
+										  + "N'" + item.NMua.maSoThue + "',"
+										  + timenow + ","
+										  + "N'" + item.NBan.maSoThue + "',"
+										  + "N'" + maTraCuuHoaDonInput + "',"
+										  + "N'" + maSoDuThuongInput + "',"
+										  + item.listHHDV.get(0).tgTien + ","
+										  + "N'" + coQuanThueInput + "',"
+										  + "N'" + soHoaDonInput + "',"
+										  + "N'" + mauSoHoaDonInput + "',"
+										  + "N'" + linkPDFInput + "',"
+										  + "N'" + linkXMLInput + "',"
+										  + "N'" + item.getListHHDV() + "',"
+										  + "N'" +  item.NBan.tenDoanhNghiep + "',"
+										  + "N'" +  item.NMua.tenDoanhNghiep + "',"
+										  + "N'" + item.EmailNMua + "'"
+										  + ");";
 			
 			Data.ghiLogRequest(TAG + "\tinsert:" + strSqlInsert);
 			
@@ -346,10 +346,10 @@ public class TableHoaDon {
 		try {
 			connect = DbUtil.getConnect(DbUtil.URL, DbUtil.USER, DbUtil.PASS);
 			String strSelect = "select count(*) as maxHD from  "
-					+ TABLE_NAME
-					+ " where "
-					+ maSoThueNguoiBan + " = N'" + maSoThue + "'"
-					+ ";";
+									   + TABLE_NAME
+									   + " where "
+									   + maSoThueNguoiBan + " = N'" + maSoThue + "'"
+									   + ";";
 			Data.ghiLogRequest("getMaxSoHoaDon - select=" + strSelect);
 			statement = (PreparedStatement) connect.prepareStatement(strSelect);
 			result = statement.executeQuery();			

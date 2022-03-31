@@ -1,9 +1,12 @@
 package FPT;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.ws.rs.core.UriBuilder;
 
+import FPT.object.HangHoa;
+import FPT.object.Item;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -71,7 +74,9 @@ public class FPTFunc {
 		Inv inv = new Inv();
 		inv.sid = VimassCommon.generateSessionKey(15);
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
-		inv.type = FPTUltis.HOADON_GTGT;
+		if (objInput.loaiHoaDon.equals(FPTUltis.HOADON_GTGT)
+		|| objInput.loaiHoaDon.equals("")) inv.type = FPTUltis.HOADON_GTGT;
+			else inv.type = objInput.loaiHoaDon;
 		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
 		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
 		inv.seq =  ""; 			// số hóa đơn, không điền vào thì số tự tăng
@@ -107,17 +112,25 @@ public class FPTFunc {
 		inv.btel =  objInput.soDienThoaiNguoiMua;
 		inv.bmail = objInput.emailNguoiMua;
 		inv.paym =  objInput.hinhThucThanhToan;
-		inv.curr =  "VND";
 		inv.bacc =  objInput.soTaiKhoanNguoiMua;
 		inv.bbank =  objInput.nganHangNguoiMua;
 		inv.note =  objInput.ghiChu;
-		
-		if (objInput.tiGia == 0) objInput.tiGia = 1;
+
+		inv.sum = 0;
+		inv.vat = 0;
+		ArrayList<Item> items = new ArrayList<>();
+		for (HangHoa hangHoa: objInput.listHHDV){
+			Item item_ = tinhItem (hangHoa);
+			items.add(item_);
+			inv.vat += item_.vat;
+			inv.sum += item_.amount;
+		}
+		inv.items = items;
+
+		inv.curr =  objInput.tienTe;
 		inv.exrt =  objInput.tiGia;
-		inv.sum =  objInput.tongTienChuaThueNguyenTe;
-		inv.sumv =  objInput.tongTienChuaThueNguyenTe * inv.exrt;
-		inv.vat =  objInput.tongTienThueNguyenTe;
-		inv.vatv =  objInput.tongTienThueNguyenTe * inv.exrt;
+		inv.sumv =  inv.sum * inv.exrt;
+		inv.vatv =  inv.vat  * inv.exrt;
 		
 		double totalMoney = inv.sumv + inv.vatv;
 //		inv.word =  FPTUltis.convertMoneyToWord(totalMoney); // Khi số tiền quá lớn, hệ thống sẽ hiển thị dạng a10^b ().
@@ -131,8 +144,7 @@ public class FPTFunc {
 		inv.type_ref =  1;		// 1 hóa đơn TT78
 		inv.listnum =  ""; 		// bảng kê
 		inv.listdt =  ""; 		// list bảng kê
-		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp  
-		inv.items = objInput.items;
+		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp
 		inv.stax = objInput.maSoThueNguoiBan;
 		
 		objRoot.inv = inv;
@@ -243,7 +255,7 @@ public class FPTFunc {
 		}
 		
 		Inv inv = new Inv();
-		inv.sid = objInput.sidHoaDon;
+		inv.sid = objInput.keyHoaDon;
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		inv.type = FPTUltis.HOADON_GTGT;
 		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
@@ -285,13 +297,22 @@ public class FPTFunc {
 		inv.bbank =  objInput.nganHangNguoiMua;
 		inv.note =  objInput.ghiChu;
 
-		if (objInput.tiGia == 0) objInput.tiGia = 1;
+		inv.sum = 0;
+		inv.vat = 0;
+		ArrayList<Item> items = new ArrayList<>();
+		for (HangHoa hangHoa: objInput.listHHDV){
+			Item item_ = tinhItem (hangHoa);
+			items.add(item_);
+			inv.vat += item_.vat;
+			inv.sum += item_.amount;
+		}
+		inv.items = items;
+
+		inv.curr =  objInput.tienTe;
 		inv.exrt =  objInput.tiGia;
-		inv.sum =  objInput.tongTienChuaThueNguyenTe;
-		inv.sumv =  objInput.tongTienChuaThueNguyenTe * inv.exrt;
-		inv.vat =  objInput.tongTienThueNguyenTe;
-		inv.vatv =  objInput.tongTienThueNguyenTe * inv.exrt;
-		
+		inv.sumv =  inv.sum * inv.exrt;
+		inv.vatv =  inv.vat  * inv.exrt;
+
 		double totalMoney = inv.sumv + inv.vatv;
 //		inv.word =  FPTUltis.convertMoneyToWord(totalMoney);
 		inv.total =  totalMoney;
@@ -303,8 +324,7 @@ public class FPTFunc {
 		inv.type_ref =  1; 		// 1 hóa đơn TT78
 		inv.listnum =  ""; 		// bảng kê
 		inv.listdt =  ""; 		// list bảng kê
-		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp  
-		inv.items = objInput.items;
+		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp
 		inv.stax = objInput.maSoThueNguoiBan;
 		
 		objRoot.inv = inv;
@@ -462,13 +482,22 @@ public class FPTFunc {
 		inv.bbank =  objInput.nganHangNguoiMua;
 		inv.note =  objInput.ghiChu;
 
-		if (objInput.tiGia == 0) objInput.tiGia = 1;
+		inv.sum = 0;
+		inv.vat = 0;
+		ArrayList<Item> items = new ArrayList<>();
+		for (HangHoa hangHoa: objInput.listHHDV){
+			Item item_ = tinhItem (hangHoa);
+			items.add(item_);
+			inv.vat += item_.vat;
+			inv.sum += item_.amount;
+		}
+		inv.items = items;
+
+		inv.curr =  objInput.tienTe;
 		inv.exrt =  objInput.tiGia;
-		inv.sum =  objInput.tongTienChuaThueNguyenTe;
-		inv.sumv =  objInput.tongTienChuaThueNguyenTe * inv.exrt;
-		inv.vat =  objInput.tongTienThueNguyenTe;
-		inv.vatv =  objInput.tongTienThueNguyenTe * inv.exrt;
-		
+		inv.sumv =  inv.sum * inv.exrt;
+		inv.vatv =  inv.vat  * inv.exrt;
+
 		double totalMoney = inv.sumv + inv.vatv;
 //		inv.word =  FPTUltis.convertMoneyToWord(totalMoney);
 		inv.total =  totalMoney;
@@ -480,8 +509,7 @@ public class FPTFunc {
 		inv.type_ref =  1; 		// 1 hóa đơn TT78
 		inv.listnum =  ""; 		// bảng kê
 		inv.listdt =  ""; 		// list bảng kê
-		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp  
-		inv.items = objInput.items;
+		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp
 		inv.stax = objInput.maSoThueNguoiBan;
 		
 		objRoot.inv = inv;
@@ -586,13 +614,22 @@ public class FPTFunc {
 		inv.bbank =  objInput.nganHangNguoiMua;
 		inv.note =  objInput.ghiChu;
 
-		if (objInput.tiGia == 0) objInput.tiGia = 1;
+		inv.sum = 0;
+		inv.vat = 0;
+		ArrayList<Item> items = new ArrayList<>();
+		for (HangHoa hangHoa: objInput.listHHDV){
+			Item item_ = tinhItem (hangHoa);
+			items.add(item_);
+			inv.vat += item_.vat;
+			inv.sum += item_.amount;
+		}
+		inv.items = items;
+
+		inv.curr =  objInput.tienTe;
 		inv.exrt =  objInput.tiGia;
-		inv.sum =  objInput.tongTienChuaThueNguyenTe;
-		inv.sumv =  objInput.tongTienChuaThueNguyenTe * inv.exrt;
-		inv.vat =  objInput.tongTienThueNguyenTe;
-		inv.vatv =  objInput.tongTienThueNguyenTe * inv.exrt;
-		
+		inv.sumv =  inv.sum * inv.exrt;
+		inv.vatv =  inv.vat  * inv.exrt;
+
 		double totalMoney = inv.sumv + inv.vatv;
 //		inv.word =  FPTUltis.convertMoneyToWord(totalMoney);
 		inv.total =  totalMoney;
@@ -604,8 +641,7 @@ public class FPTFunc {
 		inv.type_ref =  1; 		// 1 hóa đơn TT78
 		inv.listnum =  ""; 		// bảng kê
 		inv.listdt =  ""; 		// list bảng kê
-		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp  
-		inv.items = objInput.items;
+		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp
 		inv.stax = objInput.maSoThueNguoiBan;
 		
 		objRoot.inv = inv;
@@ -917,5 +953,31 @@ public class FPTFunc {
 //		}
 
 		return new Gson().toJson(result);
+	}
+
+	private static Item tinhItem(HangHoa hangHoa) {
+		if (hangHoa.thueSuat.equals("")) hangHoa.thueSuat = "0";
+		Item item_ = new Item();
+		item_.line = hangHoa.sTT;
+		item_.type = hangHoa.hinhThucHangHoa;
+		item_.vrt = hangHoa.thueSuat;
+		item_.code = hangHoa.maHangHoa;
+		item_.name = hangHoa.ten;
+		item_.unit = hangHoa.donViTinh;
+		item_.price = hangHoa.donGia;
+		item_.quantity = hangHoa.soLuong;
+		item_.perdiscount = hangHoa.tyLeChietKhau;
+		item_.amtdiscount = hangHoa.soTienChietKhau;
+
+		if (hangHoa.donGia == 0 && hangHoa.soLuong == 0){
+			item_.amount = hangHoa.thanhTien;
+		} else {
+			item_.amount = Math.round(hangHoa.donGia * hangHoa.soLuong * (100 - hangHoa.tyLeChietKhau) / 100);
+		}
+		int thueXuat = Integer.parseInt(hangHoa.thueSuat);
+		if (thueXuat <= 0) thueXuat = 0;
+		item_.vat = Math.round( item_.amount * thueXuat / 100);
+		item_.total = item_.amount + item_.vat;
+		return item_;
 	}
 }
