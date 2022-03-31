@@ -120,7 +120,7 @@ public class FPTFunc {
 		inv.vat = 0;
 		ArrayList<Item> items = new ArrayList<>();
 		for (HangHoa hangHoa: objInput.listHHDV){
-			Item item_ = tinhItem (hangHoa);
+			Item item_ = taoDuLieu_Item(hangHoa);
 			items.add(item_);
 			inv.vat += item_.vat;
 			inv.sum += item_.amount;
@@ -134,7 +134,7 @@ public class FPTFunc {
 		
 		double totalMoney = inv.sumv + inv.vatv;
 //		inv.word =  FPTUltis.convertMoneyToWord(totalMoney); // Khi số tiền quá lớn, hệ thống sẽ hiển thị dạng a10^b ().
-//															 //////	FPT không yêu cầu, nên giải quyết nhanh nhất, bỏ qua
+//															 //	FPT không yêu cầu, nên giải quyết nhanh nhất, bỏ qua
 		inv.total =  totalMoney;
 		inv.totalv =  totalMoney * inv.exrt;	
 		inv.tradeamount =  0;
@@ -301,7 +301,7 @@ public class FPTFunc {
 		inv.vat = 0;
 		ArrayList<Item> items = new ArrayList<>();
 		for (HangHoa hangHoa: objInput.listHHDV){
-			Item item_ = tinhItem (hangHoa);
+			Item item_ = taoDuLieu_Item(hangHoa);
 			items.add(item_);
 			inv.vat += item_.vat;
 			inv.sum += item_.amount;
@@ -486,7 +486,7 @@ public class FPTFunc {
 		inv.vat = 0;
 		ArrayList<Item> items = new ArrayList<>();
 		for (HangHoa hangHoa: objInput.listHHDV){
-			Item item_ = tinhItem (hangHoa);
+			Item item_ = taoDuLieu_Item(hangHoa);
 			items.add(item_);
 			inv.vat += item_.vat;
 			inv.sum += item_.amount;
@@ -618,7 +618,7 @@ public class FPTFunc {
 		inv.vat = 0;
 		ArrayList<Item> items = new ArrayList<>();
 		for (HangHoa hangHoa: objInput.listHHDV){
-			Item item_ = tinhItem (hangHoa);
+			Item item_ = taoDuLieu_Item(hangHoa);
 			items.add(item_);
 			inv.vat += item_.vat;
 			inv.sum += item_.amount;
@@ -955,7 +955,7 @@ public class FPTFunc {
 		return new Gson().toJson(result);
 	}
 
-	private static Item tinhItem(HangHoa hangHoa) {
+	private static Item taoDuLieu_Item(HangHoa hangHoa) {
 		if (hangHoa.thueSuat.equals("")) hangHoa.thueSuat = "0";
 		Item item_ = new Item();
 		item_.line = hangHoa.sTT;

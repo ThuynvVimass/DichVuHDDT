@@ -206,14 +206,14 @@ public class CMCFunc {
 		try {
 			ObjectKeyHoaDon objKeyHD = new Gson().fromJson(input, ObjectKeyHoaDon.class);
 			
-			String ketQuaKyDuyetHoaDon = def.apiKyHDon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.b_KeyHDon);
+			String ketQuaKyDuyetHoaDon = def.apiKyHDon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.keyHoaDon);
 			Data.ghiLogRequest("------------apiKyHDon---------------- ");
 			ObjectKetQuaHoaDon ketQuaPhanTich = phanTichKetQua(ketQuaKyDuyetHoaDon,"apiKyHDon");
 
 			if(ketQuaPhanTich.errorCode.equals("200"))
 			{
 				// Lay thong tin hoa don trong db where keyhoadon
-				ObjectHoaDon objectHoaDon = TableHoaDon.layDuLieu(objKeyHD.b_KeyHDon);
+				ObjectHoaDon objectHoaDon = TableHoaDon.layDuLieu(objKeyHD.keyHoaDon);
 				Data.ghiLogRequest("apiKyHDon: layThongTinHoaDonTrong DB" + objectHoaDon);
 
 				ketQua.msgCode = ErrorCode.SUCCESS;
@@ -232,7 +232,7 @@ public class CMCFunc {
 					Data.ghiLogRequest("apiInHoadon: Luu file XML " + XML_FILENAME + " thanh cong!");
 					// Ghi link file XML vao db
 					String linkXMLInput = XML_FILENAME + ".xml";
-					String kq = TableHoaDon.themLinkXML(objKeyHD.b_KeyHDon, linkXMLInput);
+					String kq = TableHoaDon.themLinkXML(objKeyHD.keyHoaDon, linkXMLInput);
 					if (kq.equals("")) Data.ghiLogRequest("Loi khi luu du lieu vao db: ");
 				}
 				else {
@@ -262,19 +262,19 @@ public class CMCFunc {
 		try {
 			ObjectKeyHoaDon objKeyHD = new Gson().fromJson(input, ObjectKeyHoaDon.class);
 			
-			String inHoaDon_response = def.apiInHoadon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.b_KeyHDon);
+			String inHoaDon_response = def.apiInHoadon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.keyHoaDon);
 			Data.ghiLogRequest("------------apiInHoadon---------------- ");
 			ObjectKetQuaHoaDon ketQuaInHoaDon = phanTichKetQua(inHoaDon_response,"apiInHoadon");
 			if(ketQuaInHoaDon.errorCode.equals("200"))
 			{
 				// Lay thong tin hoa don trong db where keyhoadon
-				ObjectHoaDon objectHoaDon = TableHoaDon.layDuLieu(objKeyHD.b_KeyHDon);
+				ObjectHoaDon objectHoaDon = TableHoaDon.layDuLieu(objKeyHD.keyHoaDon);
 				Data.ghiLogRequest("apiKyHDon: layThongTinHoaDonTrong DB" + objectHoaDon);
 
 				Data.ghiLogRequest("apiInHoadon:kq " +ketQuaInHoaDon.errorCode + " " + ketQuaInHoaDon.thongTinThem);
 				// Luu du lieu hoa don
 				String linkPDFInput = ketQuaInHoaDon.thongTinThem;
-				String kq = TableHoaDon.themlink(objKeyHD.b_KeyHDon, linkPDFInput);
+				String kq = TableHoaDon.themlink(objKeyHD.keyHoaDon, linkPDFInput);
 				if(kq!="")
 				{
 					ketQua.result = ketQuaInHoaDon;
@@ -306,14 +306,14 @@ public class CMCFunc {
 		try {
 			ObjectKeyHoaDon objKeyHD = new Gson().fromJson(input, ObjectKeyHoaDon.class);
 
-			String ketQuaKyDuyetHoaDon = def.apiKyHDon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.b_KeyHDon);
+			String ketQuaKyDuyetHoaDon = def.apiKyHDon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.keyHoaDon);
 			Data.ghiLogRequest("------------apiKyHDon---------------- ");
 			ObjectKetQuaHoaDon ketQuaPhanTich = phanTichKetQua(ketQuaKyDuyetHoaDon,"apiKyHDon");
 
 			if(ketQuaPhanTich.errorCode.equals("200"))
 			{
 				// Lay thong tin hoa don trong db where keyhoadon
-				ObjectHoaDon objectHoaDon = TableHoaDon.layDuLieu(objKeyHD.b_KeyHDon);
+				ObjectHoaDon objectHoaDon = TableHoaDon.layDuLieu(objKeyHD.keyHoaDon);
 				Data.ghiLogRequest("apiKyHDon: layThongTinHoaDonTrong DB" + objectHoaDon);
 
 				ketQua.msgCode = ErrorCode.SUCCESS;
@@ -330,7 +330,7 @@ public class CMCFunc {
 				if(FileManager.checkFileExist(XML_FILENAME + ".xml"))
 				{
 					Data.ghiLogRequest("apiInHoadon: Luu file XML " + XML_FILENAME + " thanh cong!");
-					String inHoaDon_response = def.apiInHoadon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.b_KeyHDon);
+					String inHoaDon_response = def.apiInHoadon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.keyHoaDon);
 					Data.ghiLogRequest("------------apiInHoadon---------------- ");
 					ObjectKetQuaHoaDon ketQuaInHoaDon = phanTichKetQua(inHoaDon_response,"apiInHoadon");
 					if(ketQuaInHoaDon.errorCode.equals("200"))
@@ -339,7 +339,7 @@ public class CMCFunc {
 						// Luu du lieu hoa don
 						String linkXMLInput = XML_FILENAME + ".xml";
 						String linkPDFInput = ketQuaInHoaDon.thongTinThem;
-						String kq2 = TableHoaDon.themlink(objKeyHD.b_KeyHDon, linkXMLInput, linkPDFInput);
+						String kq2 = TableHoaDon.themlink(objKeyHD.keyHoaDon, linkXMLInput, linkPDFInput);
 						if(kq2!="")
 						{
 							ketQua.result = ketQuaInHoaDon;
@@ -381,7 +381,7 @@ public class CMCFunc {
 		try {
 			ObjectKeyHoaDon objKeyHD = new Gson().fromJson(input, ObjectKeyHoaDon.class);
 			
-			String ketQuaHuyHoaDon = def.apiHuyHDon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.b_KeyHDon);
+			String ketQuaHuyHoaDon = def.apiHuyHDon(CMCUtils.SERVICES_USER, CMCUtils.SERVICES_PASS, objKeyHD.keyHoaDon);
 			Data.ghiLogRequest("------------apiHuyHDon---------------- ");
 			ObjectKetQuaHoaDon ketQuaPhanTich = phanTichKetQua(ketQuaHuyHoaDon,"apiHuyHDon");
 
@@ -874,7 +874,7 @@ public class CMCFunc {
 	{
 		TTChung param = null;	
 		try {
-			 System.out.println("taoDuLieu_TTChung: ObjectThongTinHoaDon : " + obj.kieuPhatHanh);
+			System.out.println("taoDuLieu_TTChung: ObjectThongTinHoaDon : " + obj.kieuPhatHanh);
 			String PBan = "";
 	        String THDon = "";
 	        String KHMSHDon = obj.NBan.maSoHoaDon;
