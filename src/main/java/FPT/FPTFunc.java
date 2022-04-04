@@ -111,7 +111,8 @@ public class FPTFunc {
 		inv.btax =  objInput.maSoThueNguoiMua;		
 		inv.btel =  objInput.soDienThoaiNguoiMua;
 		inv.bmail = objInput.emailNguoiMua;
-		inv.paym =  objInput.hinhThucThanhToan;
+		if (objInput.hinhThucThanhToan != null)
+			inv.paym =  objInput.hinhThucThanhToan;
 		inv.bacc =  objInput.soTaiKhoanNguoiMua;
 		inv.bbank =  objInput.nganHangNguoiMua;
 		inv.note =  objInput.ghiChu;
@@ -967,12 +968,13 @@ public class FPTFunc {
 		item_.price = hangHoa.donGia;
 		item_.quantity = hangHoa.soLuong;
 		item_.perdiscount = hangHoa.tyLeChietKhau;
-		item_.amtdiscount = hangHoa.soTienChietKhau;
 
 		if (hangHoa.donGia == 0 && hangHoa.soLuong == 0){
 			item_.amount = hangHoa.thanhTien;
+			item_.amtdiscount = hangHoa.soTienChietKhau;
 		} else {
 			item_.amount = Math.round(hangHoa.donGia * hangHoa.soLuong * (100 - hangHoa.tyLeChietKhau) / 100);
+			item_.amtdiscount = Math.round(hangHoa.donGia * hangHoa.soLuong * hangHoa.tyLeChietKhau / 100);
 		}
 		int thueXuat = Integer.parseInt(hangHoa.thueSuat);
 		if (thueXuat <= 0) thueXuat = 0;

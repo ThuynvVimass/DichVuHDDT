@@ -11,7 +11,7 @@ public class Item{
     public String unit = "";
     public double price = 0;
     public int quantity = 0;
-    public int perdiscount = 0;
+    public double perdiscount = 0;
     public double amtdiscount = 0;
     public double amount = 0;
     public double vat = 0;

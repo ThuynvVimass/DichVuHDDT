@@ -11,7 +11,7 @@ public class HangHoa {
     public String donViTinh = "";               // null
     public double donGia = 0;                   // not null
     public int soLuong = 0;                     // not null
-    public int tyLeChietKhau = 0;               // null
+    public double tyLeChietKhau = 0;               // null
     public double soTienChietKhau = 0;          // null
     public double thanhTien = 0;                // null, truyền khi không truyền gia, soLuong
     
