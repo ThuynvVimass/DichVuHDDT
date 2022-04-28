@@ -4,6 +4,6 @@ import FPT.object.hoaDonTaoMoi.Object_ThongTinHoaDon;
 
 public class Object_ChinhSuaHoaDon extends Object_ThongTinHoaDon {
 
-	public String keyHoaDon;
+	public String sidHoaDon;
 
 }

@@ -23,7 +23,7 @@ public class TableDonVi {
 	public static final String diaChi = "diaChi";
 	public static final String coQuanThue = "coQuanThue";	
 	public static final String coQuanThueCapCuc = "coQuanThueCapCuc";	
-	public static final String maSoHoaDon = "maSoHoaDon";
+	public static final String mauSoHoaDon = "mauSoHoaDon";
 	public static final String kyHieuHoaDon = "kyHieuHoaDon";
 	public static final String checkSum = "checkSum";
 	public static final String maxHD = "maxHD";
@@ -49,14 +49,14 @@ public class TableDonVi {
 										  + diaChi + ", "
 										  + coQuanThue + ", "
 										  + coQuanThueCapCuc + ", "
-										  + maSoHoaDon + ", "
+										  + mauSoHoaDon + ", "
 										  + kyHieuHoaDon + ", "
 										  + checkSum + ", "
 										  + maxHD + ", "
 										  + banQuyen + ", "
 										  + goiHoaDon + ", "
-										  + password + ", "
-										  + user
+										  + user + ", "
+										  + password
 										  + " ) VALUES ("
 										  + "N'" + item.maSoThue + "',"
 										  + item.trangThai + ","
@@ -67,7 +67,7 @@ public class TableDonVi {
 										  + "N'" + item.diaChi + "',"
 										  + "N'" + item.coQuanThue + "',"
 										  + "N'" + item.coQuanThueCapCuc + "',"
-										  + "N'" + item.maSoHoaDon + "',"
+										  + "N'" + item.mauSoHoaDon + "',"
 										  + "N'" + item.kyHieuHoaDon + "',"
 										  + "N'" + checkSum1 + "',"
 										  + item.maxHD + ","
@@ -127,7 +127,7 @@ public class TableDonVi {
 					kq.diaChi = resultSet.getString(diaChi);
 					kq.coQuanThue = resultSet.getString(coQuanThue);
 					kq.coQuanThueCapCuc = resultSet.getString(coQuanThueCapCuc);
-					kq.maSoHoaDon = resultSet.getString(maSoHoaDon);
+					kq.mauSoHoaDon = resultSet.getString(mauSoHoaDon);
 					kq.kyHieuHoaDon = resultSet.getString(kyHieuHoaDon);
 					kq.banQuyen = resultSet.getString(banQuyen);
 					kq.goiHoaDon = resultSet.getString(goiHoaDon);
@@ -164,7 +164,7 @@ public class TableDonVi {
 										  + diaChi + " = N'" + item.diaChi + "', "
 										  + coQuanThue + " = N'" + item.coQuanThue + "', "
 										  + coQuanThueCapCuc + " = N'" + item.coQuanThueCapCuc + "', "
-										  + maSoHoaDon + " = N'" + item.maSoHoaDon + "', "
+										  + mauSoHoaDon + " = N'" + item.mauSoHoaDon + "', "
 										  + kyHieuHoaDon+  " = N'" + item.kyHieuHoaDon + "', "
 										  + checkSum + " = N'" + checkSum1 + "', "
 										  + maxHD + " = " + item.maxHD + ", "

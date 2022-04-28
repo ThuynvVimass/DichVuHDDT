@@ -82,6 +82,7 @@ public class Doc_TC {
     public double tradeamount = 0;
     public double tradeamountv = 0;
     public int status_received = 0;
+    public String noti_err_received;
     public String link;
     
 }

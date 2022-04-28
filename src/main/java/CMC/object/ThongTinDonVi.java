@@ -13,7 +13,7 @@ public class ThongTinDonVi {
 	public String tenGiaoDich = "";
 	public String diaChi = "";
 	public String coQuanThue = "";		
-	public String maSoHoaDon = "";
+	public String mauSoHoaDon = "";
 	public String kyHieuHoaDon = "";	
 	public int maxHD = 0;	
 	public String user = "";

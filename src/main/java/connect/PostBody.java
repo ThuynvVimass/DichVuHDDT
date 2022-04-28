@@ -126,7 +126,8 @@ public class PostBody {
 				return statusLine.getStatusCode() + content;
 			}
 			if (statusLine.getStatusCode() == HttpStatus.SC_BAD_REQUEST
-					|| statusLine.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+					|| statusLine.getStatusCode() == HttpStatus.SC_UNAUTHORIZED
+						|| statusLine.getStatusCode() == HttpStatus.SC_FORBIDDEN) {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				response.getEntity().writeTo(out);
 				out.close();

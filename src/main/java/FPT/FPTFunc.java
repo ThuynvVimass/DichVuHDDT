@@ -7,6 +7,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import FPT.object.HangHoa;
 import FPT.object.Item;
+import FPT.object.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -44,6 +45,8 @@ import vn.vimass.utils.VimassCommon;
 import vn.vimass.utils.gson.DoubleTypeAdapter;
 import vn.vimass.utils.gson.IntegerTypeAdapter;
 
+import static CMC.Table.TableDonVi.user;
+
 public class FPTFunc {
 
 	public static String lapHoaDon(String input)
@@ -57,28 +60,25 @@ public class FPTFunc {
 		
 		Object_HDDT_FPT objRoot = new Object_HDDT_FPT();
 		objRoot.lang = "vn";
-		
-		try {
-			ThongTinDonVi donvi = new ThongTinDonVi(); 
-			donvi = TableDonVi.getThongTinDonVi(objInput.maSoThueNguoiBan);	
-			
-			objRoot.user.username = donvi.user;
-			objRoot.user.password = donvi.password;
-			
-			Data.ghiLogRequest("donvi: " + objRoot.user.username);
-		}catch (Exception e) {
-			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
-		}
-		
-		
+
 		Inv inv = new Inv();
+		ThongTinDonVi thongTinDonVi = null;
+		thongTinDonVi = getThongTinDonVi(objInput.maSoThueNguoiBan);
+		if (thongTinDonVi != null) {
+			objRoot.user.username = thongTinDonVi.maSoThue + "." + thongTinDonVi.user;
+			objRoot.user.password = thongTinDonVi.password;
+
+			inv.form = thongTinDonVi.mauSoHoaDon;		// mẫu hóa đơn đã đăng ký trên web
+			inv.serial = thongTinDonVi.kyHieuHoaDon; 	// ký hiệu hóa đơn đã đăng ký
+		}
+
 		inv.sid = VimassCommon.generateSessionKey(15);
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		if (objInput.loaiHoaDon.equals(FPTUltis.HOADON_GTGT)
 		|| objInput.loaiHoaDon.equals("")) inv.type = FPTUltis.HOADON_GTGT;
 			else inv.type = objInput.loaiHoaDon;
-		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
-		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
+//		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
+//		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
 		inv.seq =  ""; 			// số hóa đơn, không điền vào thì số tự tăng
 		inv.bcode =  ""; 		// mã khách hàng, không bắt buộc
 		
@@ -187,22 +187,10 @@ public class FPTFunc {
 		
 		Object_HoaDonCanKyDuyet_FPT objRoot = new Object_HoaDonCanKyDuyet_FPT();
 		objRoot.lang = "vn";
-		
-		try {
-			ThongTinDonVi donvi = new ThongTinDonVi(); 
-			donvi = TableDonVi.getThongTinDonVi(objInput.maSoThueNguoiBan);	
-			
-			objRoot.user.username = donvi.user;
-			objRoot.user.password = donvi.password;
-			
-			Data.ghiLogRequest("donvi: " + objRoot.user.username);
-		}catch (Exception e) {
-			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
-		}
-		
-//		Inv_Duyet inv = new Inv_Duyet ();
-//		objRoot.inv = inv;
-		objRoot.inv.sid = objInput.keyHoaDon;
+
+		objRoot.user = getUserDonVi(objInput.maSoThueNguoiBan);
+
+		objRoot.inv.sid = objInput.sidHoaDon;
 		objRoot.inv.stax = objInput.maSoThueNguoiBan;
 						
 		String url = FPTUltis.URL_KYDUYET_HOADON;
@@ -242,25 +230,23 @@ public class FPTFunc {
 		
 		Object_HDDT_FPT objRoot = new Object_HDDT_FPT();
 		objRoot.lang = "vn";
-		
-		try {
-			ThongTinDonVi donvi = new ThongTinDonVi(); 
-			donvi = TableDonVi.getThongTinDonVi(objInput.maSoThueNguoiBan);	
-			
-			objRoot.user.username = donvi.user;
-			objRoot.user.password = donvi.password;
-			
-			Data.ghiLogRequest("donvi: " + objRoot.user.username);
-		}catch (Exception e) {
-			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
-		}
-		
+
 		Inv inv = new Inv();
-		inv.sid = objInput.keyHoaDon;
+		ThongTinDonVi thongTinDonVi = null;
+		thongTinDonVi = getThongTinDonVi(objInput.maSoThueNguoiBan);
+		if (thongTinDonVi != null) {
+			objRoot.user.username = thongTinDonVi.maSoThue + "." + thongTinDonVi.user;
+			objRoot.user.password = thongTinDonVi.password;
+
+			inv.form = thongTinDonVi.mauSoHoaDon;		// mẫu hóa đơn đã đăng ký trên web
+			inv.serial = thongTinDonVi.kyHieuHoaDon; 	// ký hiệu hóa đơn đã đăng ký
+		}
+
+		inv.sid = objInput.sidHoaDon;
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		inv.type = FPTUltis.HOADON_GTGT;
-		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
-		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
+//		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
+//		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
 		inv.seq =  ""; 			// số hóa đơn, không điền vào thì số tự tăng
 		inv.bcode =  ""; 		// mã khách hàng, không bắt buộc
 		
@@ -363,18 +349,8 @@ public class FPTFunc {
 				
 				Object_HuyHoaDon_FPT objRoot = new Object_HuyHoaDon_FPT();
 				objRoot.lang = "vn";
-				
-				try {
-					ThongTinDonVi donvi = new ThongTinDonVi(); 
-					donvi = TableDonVi.getThongTinDonVi(objInput.maSoThueNguoiBan);	
-					
-					objRoot.user.username = donvi.user;
-					objRoot.user.password = donvi.password;
-					
-					Data.ghiLogRequest("donvi: " + objRoot.user.username);
-				}catch (Exception e) {
-					Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
-				}
+
+				objRoot.user = getUserDonVi(objInput.maSoThueNguoiBan);
 				
 				WrongNotice wrongNotice = new WrongNotice();
 				wrongNotice.stax = objInput.maSoThueNguoiBan;
@@ -420,20 +396,18 @@ public class FPTFunc {
 		
 		Object_ThayTheHoaDon_FPT objRoot = new Object_ThayTheHoaDon_FPT();
 		objRoot.lang = "vn";
-		
-		try {
-			ThongTinDonVi donvi = new ThongTinDonVi(); 
-			donvi = TableDonVi.getThongTinDonVi(objInput.maSoThueNguoiBan);	
-			
-			objRoot.user.username = donvi.user;
-			objRoot.user.password = donvi.password;
-			
-			Data.ghiLogRequest("donvi: " + objRoot.user.username);
-		}catch (Exception e) {
-			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
-		}
-		
+
+		ThongTinDonVi thongTinDonVi = null;
 		Inv_ThayThe inv = new Inv_ThayThe();
+		thongTinDonVi = getThongTinDonVi(objInput.maSoThueNguoiBan);
+		if (thongTinDonVi != null) {
+			objRoot.user.username = thongTinDonVi.maSoThue + "." + thongTinDonVi.user;
+			objRoot.user.password = thongTinDonVi.password;
+
+			inv.form = thongTinDonVi.mauSoHoaDon;		// mẫu hóa đơn đã đăng ký trên web
+			inv.serial = thongTinDonVi.kyHieuHoaDon; 	// ký hiệu hóa đơn đã đăng ký
+		}
+
 		Adj adj = new Adj();
 		inv.adj = adj;
 		inv.adj.rdt = objInput.ngayVanBanThoaThuan;
@@ -448,7 +422,7 @@ public class FPTFunc {
 		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
 		inv.seq =  ""; 			// số hóa đơn, không điền vào thì số tự tăng
 		inv.bcode =  ""; 		// mã khách hàng, không bắt buộc
-		
+
 		try {
 			ThongTin thongTinNguoiMua = new ThongTin();
 			ObjectTraCuuThongTinDoanhNghiep input_tracuu = new ObjectTraCuuThongTinDoanhNghiep();
@@ -552,20 +526,18 @@ public class FPTFunc {
 		
 		Object_ThayTheHoaDon_FPT objRoot = new Object_ThayTheHoaDon_FPT();
 		objRoot.lang = "vn";
-		
-		try {
-			ThongTinDonVi donvi = new ThongTinDonVi(); 
-			donvi = TableDonVi.getThongTinDonVi(objInput.maSoThueNguoiBan);	
-			
-			objRoot.user.username = donvi.user;
-			objRoot.user.password = donvi.password;
-			
-			Data.ghiLogRequest("donvi: " + objRoot.user.username);
-		}catch (Exception e) {
-			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
-		}
-		
+
+		ThongTinDonVi thongTinDonVi = null;
 		Inv_ThayThe inv = new Inv_ThayThe();
+		thongTinDonVi = getThongTinDonVi(objInput.maSoThueNguoiBan);
+		if (thongTinDonVi != null) {
+			objRoot.user.username = thongTinDonVi.maSoThue + "." + thongTinDonVi.user;
+			objRoot.user.password = thongTinDonVi.password;
+
+			inv.form = thongTinDonVi.mauSoHoaDon;		// mẫu hóa đơn đã đăng ký trên web
+			inv.serial = thongTinDonVi.kyHieuHoaDon; 	// ký hiệu hóa đơn đã đăng ký
+		}
+
 		Adj adj = new Adj();
 		inv.adj = adj;
 		inv.adj.rdt = objInput.ngayVanBanThoaThuan;
@@ -576,8 +548,8 @@ public class FPTFunc {
 		inv.sid = VimassCommon.generateSessionKey(15);
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		inv.type = FPTUltis.HOADON_GTGT;
-		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
-		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
+//		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
+//		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
 		inv.seq =  ""; 			// số hóa đơn, không điền vào thì số tự tăng
 		inv.bcode =  ""; 		// mã khách hàng, không bắt buộc
 		
@@ -686,18 +658,8 @@ public class FPTFunc {
 		
 		Object_XoaHoaDonChuaCapSo_FPT objRoot = new Object_XoaHoaDonChuaCapSo_FPT();
 		objRoot.lang = "vn";
-		
-		try {
-			ThongTinDonVi donvi = new ThongTinDonVi(); 
-			donvi = TableDonVi.getThongTinDonVi(objInput.maSoThueNguoiBan);	
-			
-			objRoot.user.username = donvi.user;
-			objRoot.user.password = donvi.password;
-			
-			Data.ghiLogRequest("donvi: " + objRoot.user.username);
-		}catch (Exception e) {
-			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
-		}
+
+		objRoot.user = getUserDonVi(objInput.maSoThueNguoiBan);
 
 		objRoot.sid = objInput.keyHoaDon;
 		objRoot.stax = objInput.maSoThueNguoiBan;
@@ -827,18 +789,11 @@ public class FPTFunc {
 		result.msgContent = ErrorCode.MES_FALSE;
 				
 		Object_TraCuuHoaDon objInput = new Gson().fromJson(input, Object_TraCuuHoaDon.class);
-		
-		try {
-			ThongTinDonVi donvi = new ThongTinDonVi(); 
-			donvi = TableDonVi.getThongTinDonVi(objInput.maSoThueNguoiBan);	
-			
-			objInput.username = donvi.user;
-			objInput.password = donvi.password;
-			
-			Data.ghiLogRequest("donvi: " + objInput.username);
-		}catch (Exception e) {
-			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
-		}
+
+		User user = getUserDonVi(objInput.maSoThueNguoiBan);
+		objInput.username = user.username;
+		objInput.password = user.password;
+
 		if (objInput.dinhDangMuonTraVe.equals(""))objInput.dinhDangMuonTraVe = "json";				
 		String url = FPTUltis.URL_TRACUU_HOADON;
 
@@ -897,17 +852,10 @@ public class FPTFunc {
 
 		Object_TraCuuHoaDon objInput = new Gson().fromJson(input, Object_TraCuuHoaDon.class);
 
-		try {
-			ThongTinDonVi donvi = new ThongTinDonVi();
-			donvi = TableDonVi.getThongTinDonVi(objInput.maSoThueNguoiBan);
+		User user = getUserDonVi(objInput.maSoThueNguoiBan);
+		objInput.username = user.username;
+		objInput.password = user.password;
 
-			objInput.username = donvi.user;
-			objInput.password = donvi.password;
-
-			Data.ghiLogRequest("donvi: " + objInput.username);
-		}catch (Exception e) {
-			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
-		}
 		if (objInput.dinhDangMuonTraVe.equals(""))objInput.dinhDangMuonTraVe = "json";
 		String url = FPTUltis.URL_TRACUU_HOADON;
 
@@ -981,5 +929,29 @@ public class FPTFunc {
 		item_.vat = Math.round( item_.amount * thueXuat / 100);
 		item_.total = item_.amount + item_.vat;
 		return item_;
+	}
+
+	private static ThongTinDonVi getThongTinDonVi(String maSoThueNguoiBan) {
+		ThongTinDonVi donvi = new ThongTinDonVi();
+		try {
+			donvi = TableDonVi.getThongTinDonVi(maSoThueNguoiBan);
+			Data.ghiLogRequest("donvi: " + donvi);
+		}catch (Exception e) {
+			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
+		}
+		return donvi;
+	}
+
+	private static User getUserDonVi(String maSoThueNguoiBan) {
+		User user = new User();
+		try {
+			ThongTinDonVi donvi = TableDonVi.getThongTinDonVi(maSoThueNguoiBan);
+			user.username = donvi.maSoThue + "." + donvi.user;
+			user.password = donvi.password;
+			Data.ghiLogRequest("user: " + user.username);
+		}catch (Exception e) {
+			Data.ghiLogRequest("getThongTinDonVi Exception= " + e.getMessage());
+		}
+		return user;
 	}
 }

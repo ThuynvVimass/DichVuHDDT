@@ -877,7 +877,7 @@ public class CMCFunc {
 			System.out.println("taoDuLieu_TTChung: ObjectThongTinHoaDon : " + obj.kieuPhatHanh);
 			String PBan = "";
 	        String THDon = "";
-	        String KHMSHDon = obj.NBan.maSoHoaDon;
+	        String KHMSHDon = obj.NBan.mauSoHoaDon;
 	        if(KHMSHDon.equals("01GTKT"))
 	        {
 	        	THDon = "Hóa đơn giá trị gia tăng";
