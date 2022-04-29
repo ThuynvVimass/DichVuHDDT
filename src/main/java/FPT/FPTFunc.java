@@ -418,8 +418,8 @@ public class FPTFunc {
 		inv.sid = VimassCommon.generateSessionKey(15);
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		inv.type = FPTUltis.HOADON_GTGT;
-		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
-		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
+//		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
+//		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
 		inv.seq =  ""; 			// số hóa đơn, không điền vào thì số tự tăng
 		inv.bcode =  ""; 		// mã khách hàng, không bắt buộc
 
