@@ -9,6 +9,7 @@ import FPT.object.Item;
 
 public class Object_ThongTinHoaDon {
 
+	public String sidHoaDon = "";
 	public String maSoThueNguoiBan;
 	public String maSoThueNguoiMua;
 	public String loaiHoaDon = "";					// "01GTKT" là hoá đơn GTGT - mặc định

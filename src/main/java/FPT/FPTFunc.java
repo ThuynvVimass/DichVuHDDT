@@ -50,14 +50,14 @@ import static CMC.Table.TableDonVi.user;
 public class FPTFunc {
 
 	public static String lapHoaDon(String input)
-	{		
+	{
 		Data.ghiLogRequest("================ lapHoaDon() ================");
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-				
+
 		Object_ThongTinHoaDon objInput = new Gson().fromJson(input, Object_ThongTinHoaDon.class);
-		
+
 		Object_HDDT_FPT objRoot = new Object_HDDT_FPT();
 		objRoot.lang = "vn";
 
@@ -71,8 +71,10 @@ public class FPTFunc {
 			inv.form = thongTinDonVi.mauSoHoaDon;		// mẫu hóa đơn đã đăng ký trên web
 			inv.serial = thongTinDonVi.kyHieuHoaDon; 	// ký hiệu hóa đơn đã đăng ký
 		}
-
-		inv.sid = VimassCommon.generateSessionKey(15);
+		if (objInput.sidHoaDon.equals(""))
+			inv.sid = VimassCommon.generateSessionKey(15);
+		else
+			inv.sid = objInput.sidHoaDon;
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		if (objInput.loaiHoaDon.equals(FPTUltis.HOADON_GTGT)
 		|| objInput.loaiHoaDon.equals("")) inv.type = FPTUltis.HOADON_GTGT;
@@ -81,7 +83,7 @@ public class FPTFunc {
 //		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
 		inv.seq =  ""; 			// số hóa đơn, không điền vào thì số tự tăng
 		inv.bcode =  ""; 		// mã khách hàng, không bắt buộc
-		
+
 		try {
 			ThongTin thongTinNguoiMua = new ThongTin();
 			ObjectTraCuuThongTinDoanhNghiep input_tracuu = new ObjectTraCuuThongTinDoanhNghiep();
@@ -105,10 +107,10 @@ public class FPTFunc {
 		}catch (Exception e) {
 			Data.ghiLogRequest("getThongTinDonViBangMST Exception: " + e.getMessage());
 		}
-		
-				
+
+
 		inv.buyer =  objInput.tenNguoiMua;
-		inv.btax =  objInput.maSoThueNguoiMua;		
+		inv.btax =  objInput.maSoThueNguoiMua;
 		inv.btel =  objInput.soDienThoaiNguoiMua;
 		inv.bmail = objInput.emailNguoiMua;
 		if (objInput.hinhThucThanhToan != null)
@@ -132,12 +134,12 @@ public class FPTFunc {
 		inv.exrt =  objInput.tiGia;
 		inv.sumv =  inv.sum * inv.exrt;
 		inv.vatv =  inv.vat  * inv.exrt;
-		
+
 		double totalMoney = inv.sumv + inv.vatv;
 //		inv.word =  FPTUltis.convertMoneyToWord(totalMoney); // Khi số tiền quá lớn, hệ thống sẽ hiển thị dạng a10^b ().
 //															 //	FPT không yêu cầu, nên giải quyết nhanh nhất, bỏ qua
 		inv.total =  totalMoney;
-		inv.totalv =  totalMoney * inv.exrt;	
+		inv.totalv =  totalMoney * inv.exrt;
 		inv.tradeamount =  0;
 		inv.discount =  0;
 		inv.aun =  2; 			// 1 tự quản lý cấp số HĐ, 2 hệ thống cấp số hóa đơn tăng dần
@@ -147,9 +149,9 @@ public class FPTFunc {
 		inv.listdt =  ""; 		// list bảng kê
 		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp
 		inv.stax = objInput.maSoThueNguoiBan;
-		
+
 		objRoot.inv = inv;
-						
+
 		String url = FPTUltis.URL_LAP_HOADON;
 		String json = new Gson().toJson(objRoot);
 		Data.ghiLogRequest("input FPT: " + json);
@@ -159,32 +161,32 @@ public class FPTFunc {
 			if (response.substring(0,3).equals("200")) {
 				if(FPTUltis.isValidJSON(response.substring(3)))
 				{
-					Root r = new Gson().fromJson(response.substring(3), Root.class);				
+					Root r = new Gson().fromJson(response.substring(3), Root.class);
 					result.msgCode = ErrorCode.SUCCESS;
 					result.msgContent = ErrorCode.MES_SUCCESS;
-					result.result = r;			
+					result.result = r;
 				} else {
 					result.result = response.substring(3);
-				}	
+				}
 			} else {
 				result.result = response.substring(3);
 			}
-		}catch (Exception e) {			
+		}catch (Exception e) {
 			result.result = e.getMessage();
-		}	
-		
+		}
+
 		return new Gson().toJson(result);
 	}
 
 	public static String kyDuyetHoaDon(String input)
-	{		
+	{
 		Data.ghiLogRequest("================ kyDuyetHoaDon() ================");
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-				
+
 		Object_HoaDonCanKyDuyet objInput = new Gson().fromJson(input, Object_HoaDonCanKyDuyet.class);
-		
+
 		Object_HoaDonCanKyDuyet_FPT objRoot = new Object_HoaDonCanKyDuyet_FPT();
 		objRoot.lang = "vn";
 
@@ -192,7 +194,7 @@ public class FPTFunc {
 
 		objRoot.inv.sid = objInput.sidHoaDon;
 		objRoot.inv.stax = objInput.maSoThueNguoiBan;
-						
+
 		String url = FPTUltis.URL_KYDUYET_HOADON;
 		String json = new Gson().toJson(objRoot);
 		Data.ghiLogRequest("input FPT: " + json);
@@ -202,32 +204,32 @@ public class FPTFunc {
 			if (response.substring(0,3).equals("200")) {
 				if(FPTUltis.isValidJSON(response.substring(3)))
 				{
-					Root r = new Gson().fromJson(response.substring(3), Root.class);				
+					Root r = new Gson().fromJson(response.substring(3), Root.class);
 					result.msgCode = ErrorCode.SUCCESS;
 					result.msgContent = ErrorCode.MES_SUCCESS;
-					result.result = r;			
+					result.result = r;
 				} else {
 					result.result = response.substring(3);
-				}	
+				}
 			} else {
 				result.result = response.substring(3);
 			}
-		}catch (Exception e) {			
+		}catch (Exception e) {
 			result.result = e.getMessage();
-		}	
-		
+		}
+
 		return new Gson().toJson(result);
 	}
-	
+
 	public static String suaHoaDon(String input)
-	{		
+	{
 		Data.ghiLogRequest("================ suaHoaDon() ================");
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-				
+
 		Object_ChinhSuaHoaDon objInput = new Gson().fromJson(input, Object_ChinhSuaHoaDon.class);
-		
+
 		Object_HDDT_FPT objRoot = new Object_HDDT_FPT();
 		objRoot.lang = "vn";
 
@@ -249,7 +251,7 @@ public class FPTFunc {
 //		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
 		inv.seq =  ""; 			// số hóa đơn, không điền vào thì số tự tăng
 		inv.bcode =  ""; 		// mã khách hàng, không bắt buộc
-		
+
 		try {
 			ThongTin thongTinNguoiMua = new ThongTin();
 			ObjectTraCuuThongTinDoanhNghiep input_tracuu = new ObjectTraCuuThongTinDoanhNghiep();
@@ -273,9 +275,9 @@ public class FPTFunc {
 		}catch (Exception e) {
 			Data.ghiLogRequest("getThongTinDonViBangMST Exception: " + e.getMessage());
 		}
-			
+
 		inv.buyer =  objInput.tenNguoiMua;
-		inv.btax =  objInput.maSoThueNguoiMua;		
+		inv.btax =  objInput.maSoThueNguoiMua;
 		inv.btel =  objInput.soDienThoaiNguoiMua;
 		inv.bmail = objInput.emailNguoiMua;
 		inv.paym =  objInput.hinhThucThanhToan;
@@ -313,24 +315,24 @@ public class FPTFunc {
 		inv.listdt =  ""; 		// list bảng kê
 		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp
 		inv.stax = objInput.maSoThueNguoiBan;
-		
+
 		objRoot.inv = inv;
-						
+
 		String url = FPTUltis.URL_SUA_HOADON;
 		String json = new Gson().toJson(objRoot);
 		Data.ghiLogRequest("input FPT: " + json);
-		
+
 		String response = PostBody.callService(url, json);
 		try {
 			if (response.substring(0,3).equals("200")) {
 					result.msgCode = ErrorCode.SUCCESS;
-					result.msgContent = ErrorCode.MES_SUCCESS;			
+					result.msgContent = ErrorCode.MES_SUCCESS;
 			}
-			result.result = response.substring(3);	
-		}catch (Exception e) {			
+			result.result = response.substring(3);
+		}catch (Exception e) {
 			result.result = e.getMessage();
 		}
-		
+
 		return new Gson().toJson(result);
 	}
 
@@ -340,60 +342,60 @@ public class FPTFunc {
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-		
+
 		if(input!=null&&input!="")
 		{
 			try
 			{
 				Object_HuyHoaDon objInput = new Gson().fromJson(input, Object_HuyHoaDon.class);
-				
+
 				Object_HuyHoaDon_FPT objRoot = new Object_HuyHoaDon_FPT();
 				objRoot.lang = "vn";
 
 				objRoot.user = getUserDonVi(objInput.maSoThueNguoiBan);
-				
+
 				WrongNotice wrongNotice = new WrongNotice();
 				wrongNotice.stax = objInput.maSoThueNguoiBan;
 				wrongNotice.noti_taxtype = objInput.loaiThongBaoHuy;
 				wrongNotice.noti_taxnum = objInput.soThongBaoCQT;
 				wrongNotice.budget_relationid = objInput.maDonViPhuThuoc;
-				wrongNotice.place = objInput.diaDanh;							
+				wrongNotice.place = objInput.diaDanh;
 				wrongNotice.items = objInput.items;
-				
+
 				objRoot.wrongnotice = wrongNotice;
-				
+
 				String json = new Gson().toJson(objRoot);
 				Data.ghiLogRequest("input FPT: " + json);
-				
+
 				String response = PostBody.callService(FPTUltis.URL_HUY_HOADON, json);
-				
+
 				if(response.substring(0,3).equals("200"))
 				{
-					Root r = new Gson().fromJson(response.substring(3), Root.class);				
+					Root r = new Gson().fromJson(response.substring(3), Root.class);
 					result.msgCode = ErrorCode.SUCCESS;
 					result.msgContent = ErrorCode.MES_SUCCESS;
-					result.result = r;			
+					result.result = r;
 				} else {
 					result.result = response.substring(3);
-				}			
-							
+				}
+
 			} catch (Exception e) {
 				Data.ghiLogRequest("huyHoaDon FPT: " + e.getMessage());
 			}
 		}
-	
+
 		return new Gson().toJson(result);
 	}
-	
+
 	public static String thayTheHoaDon(String input)
-	{		
+	{
 		Data.ghiLogRequest("================ thayTheHoaDon() ================");
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-				
+
 		Object_ThayTheHoaDon objInput = new Gson().fromJson(input, Object_ThayTheHoaDon.class);
-		
+
 		Object_ThayTheHoaDon_FPT objRoot = new Object_ThayTheHoaDon_FPT();
 		objRoot.lang = "vn";
 
@@ -414,7 +416,7 @@ public class FPTFunc {
 		inv.adj.rea = objInput.lyDoDieuChinh;
 		inv.adj.ref = objInput.soVanBanThoaThuan;
 		inv.adj.seq = objInput.thongTinHoaHoaDon;
-		
+
 		inv.sid = VimassCommon.generateSessionKey(15);
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		inv.type = FPTUltis.HOADON_GTGT;
@@ -446,9 +448,9 @@ public class FPTFunc {
 		}catch (Exception e) {
 			Data.ghiLogRequest("getThongTinDonViBangMST Exception: " + e.getMessage());
 		}
-				
+
 		inv.buyer =  objInput.tenNguoiMua;
-		inv.btax =  objInput.maSoThueNguoiMua;		
+		inv.btax =  objInput.maSoThueNguoiMua;
 		inv.btel =  objInput.soDienThoaiNguoiMua;
 		inv.bmail = objInput.emailNguoiMua;
 		inv.paym =  objInput.hinhThucThanhToan;
@@ -486,44 +488,44 @@ public class FPTFunc {
 		inv.listdt =  ""; 		// list bảng kê
 		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp
 		inv.stax = objInput.maSoThueNguoiBan;
-		
+
 		objRoot.inv = inv;
-						
+
 		String url = FPTUltis.URL_THAYTHE_HOADON;
 		String json = new Gson().toJson(objRoot);
 		Data.ghiLogRequest("input FPT: " + json);
 		String response = PostBody.callService(url, json);
-		
+
 		try {
 			if (response.substring(0,3).equals("200")) {
 				if(FPTUltis.isValidJSON(response.substring(3)))
 				{
-					Root_TT r = new Gson().fromJson(response.substring(3), Root_TT.class);				
+					Root_TT r = new Gson().fromJson(response.substring(3), Root_TT.class);
 					result.msgCode = ErrorCode.SUCCESS;
 					result.msgContent = ErrorCode.MES_SUCCESS;
-					result.result = r;			
+					result.result = r;
 				} else {
 					result.result = response.substring(3);
-				}	
+				}
 			} else {
 				result.result = response.substring(3);
 			}
-		} catch (Exception e) {			
+		} catch (Exception e) {
 			result.result = e.getMessage();
-		}	
-		
+		}
+
 		return new Gson().toJson(result);
 	}
-	
+
 	public static String dieuChinhHoaDon(String input)
-	{		
+	{
 		Data.ghiLogRequest("================ dieuChinhHoaDon() ================");
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-				
+
 		Object_ThayTheHoaDon objInput = new Gson().fromJson(input, Object_ThayTheHoaDon.class);
-		
+
 		Object_ThayTheHoaDon_FPT objRoot = new Object_ThayTheHoaDon_FPT();
 		objRoot.lang = "vn";
 
@@ -544,7 +546,7 @@ public class FPTFunc {
 		inv.adj.rea = objInput.lyDoDieuChinh;
 		inv.adj.ref = objInput.soVanBanThoaThuan;
 		inv.adj.seq = objInput.thongTinHoaHoaDon;
-		
+
 		inv.sid = VimassCommon.generateSessionKey(15);
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		inv.type = FPTUltis.HOADON_GTGT;
@@ -552,7 +554,7 @@ public class FPTFunc {
 //		inv.serial = "C22TAA"; 	// ký hiệu hóa đơn đã đăng ký
 		inv.seq =  ""; 			// số hóa đơn, không điền vào thì số tự tăng
 		inv.bcode =  ""; 		// mã khách hàng, không bắt buộc
-		
+
 		try {
 			ThongTin thongTinNguoiMua = new ThongTin();
 			ObjectTraCuuThongTinDoanhNghiep input_tracuu = new ObjectTraCuuThongTinDoanhNghiep();
@@ -576,9 +578,9 @@ public class FPTFunc {
 		}catch (Exception e) {
 			Data.ghiLogRequest("getThongTinDonViBangMST Exception: " + e.getMessage());
 		}
-				
+
 		inv.buyer =  objInput.tenNguoiMua;
-		inv.btax =  objInput.maSoThueNguoiMua;		
+		inv.btax =  objInput.maSoThueNguoiMua;
 		inv.btel =  objInput.soDienThoaiNguoiMua;
 		inv.bmail = objInput.emailNguoiMua;
 		inv.paym =  objInput.hinhThucThanhToan;
@@ -616,46 +618,46 @@ public class FPTFunc {
 		inv.listdt =  ""; 		// list bảng kê
 		inv.sendtype =  1;  	// 1 chuyển đến TTC luôn, 2 chuyển gộp
 		inv.stax = objInput.maSoThueNguoiBan;
-		
+
 		objRoot.inv = inv;
-						
+
 		String url = FPTUltis.URL_DIEUCHINH_HOADON;
 		String json = new Gson().toJson(objRoot);
 		Data.ghiLogRequest("input FPT: " + json);
 		String response = PostBody.callService(url, json);
-		
+
 		try {
 			if (response.substring(0,3).equals("200")) {
 				if(FPTUltis.isValidJSON(response.substring(3)))
 				{
-					Root_TT r = new Gson().fromJson(response.substring(3), Root_TT.class);				
+					Root_TT r = new Gson().fromJson(response.substring(3), Root_TT.class);
 					result.msgCode = ErrorCode.SUCCESS;
 					result.msgContent = ErrorCode.MES_SUCCESS;
-					result.result = r;			
+					result.result = r;
 				} else {
 					result.result = response.substring(3);
-				}	
+				}
 			} else {
 				result.result = response.substring(3);
 			}
-		} catch (Exception e) {			
+		} catch (Exception e) {
 			result.result = e.getMessage();
-		}	
-		
+		}
+
 		return new Gson().toJson(result);
 	}
-	
-	
+
+
 	public static String xoaHoaDonChuaCapSo(String input)
 	// Không test đc. Lỗi: "504 Gateway Time-out" trên api chính của FPT
-	{		
+	{
 		Data.ghiLogRequest("================ xoaHoaDonChuaCapSo() ================");
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-				
+
 		Object_XoaHoaDonChuaCapSo objInput = new Gson().fromJson(input, Object_XoaHoaDonChuaCapSo.class);
-		
+
 		Object_XoaHoaDonChuaCapSo_FPT objRoot = new Object_XoaHoaDonChuaCapSo_FPT();
 		objRoot.lang = "vn";
 
@@ -663,34 +665,34 @@ public class FPTFunc {
 
 		objRoot.sid = objInput.keyHoaDon;
 		objRoot.stax = objInput.maSoThueNguoiBan;
-		
+
 		String url = FPTUltis.URL_XOA_HOADON_CHUACAPSO;
 		String json = new Gson().toJson(objRoot);
 		Data.ghiLogRequest("input FPT: " + json);
 		String response = PostBody.callService(url, json);
-		
+
 		try {
-			if (response.substring(0,3).equals("200")) {				
+			if (response.substring(0,3).equals("200")) {
 					result.msgCode = ErrorCode.SUCCESS;
 					result.msgContent = ErrorCode.MES_SUCCESS;
-					result.result = response.substring(3);				
+					result.result = response.substring(3);
 			} else {
 				result.result = response.substring(3);
 			}
-		} catch (Exception e) {			
+		} catch (Exception e) {
 			result.result = e.getMessage();
-		}	
-		
+		}
+
 		return new Gson().toJson(result);
 	}
 
 	public static String dangKyThongTinDonVi(String input) {
-		
+
 		Data.ghiLogRequest("================ dangKythongTinDonVi() ================"+ input);
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-		
+
 		try {
 			ThongTinDonVi obj_input = new Gson().fromJson(input, ThongTinDonVi.class);
 			if(obj_input!=null)
@@ -701,7 +703,7 @@ public class FPTFunc {
 					if(mst!=null&&mst.equals(obj_input.maSoThue))
 					{
 						result.msgCode = ErrorCode.SUCCESS;
-						result.msgContent = ErrorCode.MES_SUCCESS;	
+						result.msgContent = ErrorCode.MES_SUCCESS;
 					}
 					result.result = mst;
 				}
@@ -713,17 +715,17 @@ public class FPTFunc {
 		}catch (Exception e) {
 			Data.ghiLogRequest("dangKythongTinDonVi Exception : "+ e.getMessage());
 		}
-								
+
 		return new Gson().toJson(result);
 	}
 
 	public static String thayDoiThongTinDonVi(String input) {
-		
+
 		Data.ghiLogRequest("================ thayDoithongTinDonVi() ================"+ input);
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-		
+
 		try {
 			ThongTinDonVi obj_input = new Gson().fromJson(input, ThongTinDonVi.class);
 			if(obj_input!=null)
@@ -734,7 +736,7 @@ public class FPTFunc {
 					if(mst!=null&&mst.equals(obj_input.maSoThue))
 					{
 						result.msgCode = ErrorCode.SUCCESS;
-						result.msgContent = ErrorCode.MES_SUCCESS;	
+						result.msgContent = ErrorCode.MES_SUCCESS;
 					}
 					result.result = mst;
 				}
@@ -746,24 +748,24 @@ public class FPTFunc {
 		}catch (Exception e) {
 			Data.ghiLogRequest("thayDoithongTinDonVi Exception : "+ e.getMessage());
 		}
-								
+
 		return new Gson().toJson(result);
 	}
-	
+
 	public static String traCuuThongTinDonViInDB(String maSoThue) {
-		
+
 		Data.ghiLogRequest("================ traCuuthongTinDonViInDB() ================"+ maSoThue);
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-		
+
 		try {
-			
+
 			if(maSoThue!=null)
 			{
 				ThongTinDonVi donVi = TableDonVi.getThongTinDonVi(maSoThue);
 				result.msgCode = ErrorCode.SUCCESS;
-				result.msgContent = ErrorCode.MES_SUCCESS;	
+				result.msgContent = ErrorCode.MES_SUCCESS;
 
 //				res = new Gson().fromJson(jsonNguoiBan, ObjectMessageResult.class);
 				result.result = donVi;
@@ -771,30 +773,30 @@ public class FPTFunc {
 			else {
 				result.msgCode = ErrorCode.PARAM_SATELESS;
 				result.msgContent = ErrorCode.MES_PARAM_SATELESS;
-			
+
 			}
 		}catch (Exception e) {
 			Data.ghiLogRequest("traCuuthongTinDonVi Exception : "+ e.getMessage());
 		}
-								
+
 		return new Gson().toJson(result);
 	}
-	
+
 	public static String traCuuHoaDon(String input)
-	{		
+	{
 		Data.ghiLogRequest("================ traCuuHoaDon() ================");
 		Data.ghiLogRequest("input " + input);
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
 		result.msgContent = ErrorCode.MES_FALSE;
-				
+
 		Object_TraCuuHoaDon objInput = new Gson().fromJson(input, Object_TraCuuHoaDon.class);
 
 		User user = getUserDonVi(objInput.maSoThueNguoiBan);
 		objInput.username = user.username;
 		objInput.password = user.password;
 
-		if (objInput.dinhDangMuonTraVe.equals(""))objInput.dinhDangMuonTraVe = "json";				
+		if (objInput.dinhDangMuonTraVe.equals(""))objInput.dinhDangMuonTraVe = "json";
 		String url = FPTUltis.URL_TRACUU_HOADON;
 
 		url = UriBuilder.fromUri(url).queryParam("type", objInput.dinhDangMuonTraVe)
@@ -807,13 +809,13 @@ public class FPTFunc {
 				.queryParam("seq", objInput.soHoaDon)
 				.queryParam("btax", objInput.maSoThueNguoiMua)
 				.queryParam("status", objInput.trangThai)
-				
+
 				.build().toString();
-				
+
 		Data.ghiLogRequest("url Get : " + url);
 
 //		try {
-			String response = ConnectUsingGet.getContentWithHeader(url, objInput.username, objInput.password);	
+			String response = ConnectUsingGet.getContentWithHeader(url, objInput.username, objInput.password);
 			response = response.replace("//", "");
 			if (response.indexOf("[")== -1) {
 				result.result = response;
@@ -824,21 +826,21 @@ public class FPTFunc {
 									.registerTypeAdapter(double.class, new DoubleTypeAdapter())
 									.registerTypeAdapter(int.class, new IntegerTypeAdapter())
 									.create();
-				Response_TC r = gson.fromJson(response, Response_TC.class);	
+				Response_TC r = gson.fromJson(response, Response_TC.class);
 
-				
+
 //				Object_ListHoaDon hddg = Main.objectResponseToObjectHoaDonDonGian(r);
 //				ArrayList<Doc_TC> ar = new Gson().fromJson(response, Doc_TC.class);					
 				result.msgCode = ErrorCode.SUCCESS;
 				result.msgContent = ErrorCode.MES_SUCCESS;
-				result.result = r;	
-			}		
-			
+				result.result = r;
+			}
+
 //		}catch (Exception e) {
 //			Data.ghiLogRequest("Lỗi : " + e);			
 //			result.result = e.getMessage();
 //		}	
-		
+
 		return new Gson().toJson(result);
 	}
 
