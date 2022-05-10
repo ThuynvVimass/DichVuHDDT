@@ -71,8 +71,11 @@ public class FPTFunc {
 			inv.form = thongTinDonVi.mauSoHoaDon;		// mẫu hóa đơn đã đăng ký trên web
 			inv.serial = thongTinDonVi.kyHieuHoaDon; 	// ký hiệu hóa đơn đã đăng ký
 		}
-		if (objInput.sidHoaDon.equals(""))
-			inv.sid = VimassCommon.generateSessionKey(15);
+		if (objInput.sidHoaDon.equals("")) {
+//			inv.sid = VimassCommon.generateSessionKey(15);
+			result.result = "Lỗi: thiếu thông tin sidHoaDon";
+			return new Gson().toJson(result);
+		}
 		else
 			inv.sid = objInput.sidHoaDon;
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
