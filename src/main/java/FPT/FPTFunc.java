@@ -374,14 +374,10 @@ public class FPTFunc {
 
 				if(response.substring(0,3).equals("200"))
 				{
-					Root r = new Gson().fromJson(response.substring(3), Root.class);
 					result.msgCode = ErrorCode.SUCCESS;
 					result.msgContent = ErrorCode.MES_SUCCESS;
-					result.result = r;
-				} else {
-					result.result = response.substring(3);
 				}
-
+					result.result = response.substring(3);
 			} catch (Exception e) {
 				Data.ghiLogRequest("huyHoaDon FPT: " + e.getMessage());
 			}
