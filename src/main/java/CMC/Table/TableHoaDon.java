@@ -31,39 +31,6 @@ public class TableHoaDon {
 	public static final String tenDoangNghiepMua = "tenDoangNghiepMua";
 	public static final String tenDoangNghiepBan = "tenDoangNghiepBan";
 	public static final String emailKH = "emailKH";
-	
-
-//	private static thongTinDonVi getValue(ResultSet resultSet) {
-//		thongTinDonVi item = new thongTinDonVi();
-//		
-//		try
-//		{
-//			item.maGiaoDich = resultSet.getString(maGiaoDich);
-//			item.trans_id = resultSet.getString(trans_id);
-//			item.trans_date = resultSet.getString(trans_date);
-//			
-//			
-//			item.customer_id = resultSet.getString(customer_id);
-//
-//			item.service_id = resultSet.getString(service_id);
-//
-//			item.bill_id = resultSet.getString(bill_id);
-//
-//			item.amount = resultSet.getInt(amount);
-//
-//			
-//			item.timeCreate = resultSet.getLong(timeCreate);
-//			item.cks = resultSet.getString(cks);
-//			
-//		}
-//		catch(Exception e)
-//		{
-//			
-//		}
-//		
-//		return item;
-//	}
-//	
 
 	public static ObjectHoaDon layDuLieu(String keyHoaDonInput)
 	{
