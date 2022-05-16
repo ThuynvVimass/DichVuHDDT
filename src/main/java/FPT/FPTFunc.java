@@ -439,7 +439,13 @@ public class FPTFunc {
 		inv.adj.ref = objInput.soVanBanThoaThuan;
 		inv.adj.seq = objInput.thongTinHoaHoaDon;
 
-		inv.sid = VimassCommon.generateSessionKey(15);
+		if (objInput.sidHoaDon.equals("")) {
+//			inv.sid = VimassCommon.generateSessionKey(15);
+			result.result = "Lỗi: thiếu thông tin sidHoaDon";
+			return new Gson().toJson(result);
+		}
+		else
+			inv.sid = objInput.sidHoaDon;
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		inv.type = FPTUltis.HOADON_GTGT;
 //		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
@@ -569,7 +575,13 @@ public class FPTFunc {
 		inv.adj.ref = objInput.soVanBanThoaThuan;
 		inv.adj.seq = objInput.thongTinHoaHoaDon;
 
-		inv.sid = VimassCommon.generateSessionKey(15);
+		if (objInput.sidHoaDon.equals("")) {
+//			inv.sid = VimassCommon.generateSessionKey(15);
+			result.result = "Lỗi: thiếu thông tin sidHoaDon";
+			return new Gson().toJson(result);
+		}
+		else
+			inv.sid = objInput.sidHoaDon;
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		inv.type = FPTUltis.HOADON_GTGT;
 //		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
