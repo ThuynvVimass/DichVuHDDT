@@ -1,5 +1,7 @@
 package FPT.objectResponse;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 public class Root {
@@ -61,4 +63,9 @@ public class Root {
     public String ic;
     public String adt;
     public Object sendfile;
+
+    public String getListHHDV()
+    {
+        return new Gson().toJson(items);
+    }
 }

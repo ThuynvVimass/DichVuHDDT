@@ -8,6 +8,9 @@ import javax.ws.rs.core.UriBuilder;
 import FPT.object.HangHoa;
 import FPT.object.Item;
 import FPT.object.User;
+import FPT.object.hoaDonHuy.ItemsHuy;
+import FPT.table.ObjectTableHoaDonFPT;
+import FPT.table.TableHoaDonFPT;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -44,8 +47,6 @@ import vn.vimass.utils.Data;
 import vn.vimass.utils.VimassCommon;
 import vn.vimass.utils.gson.DoubleTypeAdapter;
 import vn.vimass.utils.gson.IntegerTypeAdapter;
-
-import static CMC.Table.TableDonVi.user;
 
 public class FPTFunc {
 
@@ -165,8 +166,15 @@ public class FPTFunc {
 				if(FPTUltis.isValidJSON(response.substring(3)))
 				{
 					Root r = new Gson().fromJson(response.substring(3), Root.class);
-					result.msgCode = ErrorCode.SUCCESS;
-					result.msgContent = ErrorCode.MES_SUCCESS;
+					// Lưu thông tin hoá đơn lập thành công vào DB
+					String kq = TableHoaDonFPT.taoDuLieu(r);
+					if (kq!=""){
+						result.msgCode = ErrorCode.SUCCESS;
+						result.msgContent = ErrorCode.MES_SUCCESS;
+					} else {
+						Data.ghiLogRequest("saveToDB: " + "Tạo hoá đơn thành công nhưng lỗi khi lưu dữ liệu vào DB");
+						result.msgContent = "Tạo hoá đơn thành công nhưng lỗi khi lưu dữ liệu";
+					}
 					result.result = r;
 				} else {
 					result.result = response.substring(3);
@@ -361,9 +369,24 @@ public class FPTFunc {
 				wrongNotice.stax = objInput.maSoThueNguoiBan;
 				wrongNotice.noti_taxtype = objInput.loaiThongBaoHuy;
 				wrongNotice.noti_taxnum = objInput.soThongBaoCQT;
+				wrongNotice.noti_taxdt = objInput.ngayThongBaoCQT;
 				wrongNotice.budget_relationid = objInput.maDonViPhuThuoc;
 				wrongNotice.place = objInput.diaDanh;
-				wrongNotice.items = objInput.items;
+
+				// Lấy thông tin hoá đơn muốn huỷ từ DB - thông qua sidHoaDon
+				ObjectTableHoaDonFPT thongTinHoaDon = TableHoaDonFPT.layDuLieu(objInput.sidHoaDon);
+				if (thongTinHoaDon != null){
+					wrongNotice.items = taoDuLieu_ThongTinHoaDonHuy (thongTinHoaDon, objInput.lyDo);
+				} else {
+					// Nếu không thấy thì lấy thông tin từ DB, tìm kiếm qua FPT
+					thongTinHoaDon = traCuuHoaDon3 (objRoot.user, objInput.sidHoaDon );
+					if (thongTinHoaDon != null ){
+						wrongNotice.items = taoDuLieu_ThongTinHoaDonHuy (thongTinHoaDon, objInput.lyDo);
+					} else {
+						result.msgContent = "Không tìm thấy hoá đơn với sidHoaDon: " + objInput.sidHoaDon;
+						return new Gson().toJson(result);
+					}
+				}
 
 				objRoot.wrongnotice = wrongNotice;
 
@@ -845,7 +868,7 @@ public class FPTFunc {
 
 	public static String traCuuHoaDon2(String input)
 	{
-		Data.ghiLogRequest("================ traCuuHoaDon() ================");
+		Data.ghiLogRequest("================ traCuuHoaDon2() ================");
 		Data.ghiLogRequest("input " + input);
 		ObjectMessageResult result = new ObjectMessageResult();
 		result.msgCode = ErrorCode.FALSE;
@@ -955,4 +978,66 @@ public class FPTFunc {
 		}
 		return user;
 	}
+
+	private static ArrayList<ItemsHuy> taoDuLieu_ThongTinHoaDonHuy(ObjectTableHoaDonFPT thongTinHoaDon, String lyDo) {
+		ItemsHuy itemsHuy = new ItemsHuy();
+		itemsHuy.form = thongTinHoaDon.mauSoHoaDon;
+		itemsHuy.serial = thongTinHoaDon.kiHieuHoaDon;
+		itemsHuy.seq = thongTinHoaDon.soHoaDon;
+		itemsHuy.idt = thongTinHoaDon.thoiGianFPT;
+		itemsHuy.type_ref = 1;
+		itemsHuy.noti_type = "1";
+		itemsHuy.rea = lyDo;
+
+		ArrayList<ItemsHuy> items = new ArrayList<>();
+		items.add(itemsHuy);
+		return items;
+	}
+
+	private static ObjectTableHoaDonFPT traCuuHoaDon3(User user, String sidHoaDon)
+	{
+		Data.ghiLogRequest("================ traCuuHoaDon3() ================");
+		Data.ghiLogRequest("input: sidHoaDon " + sidHoaDon + ", user " + new Gson().toJson(user));
+		ObjectMessageResult result = new ObjectMessageResult();
+		result.msgCode = ErrorCode.FALSE;
+		result.msgContent = ErrorCode.MES_FALSE;
+		ObjectTableHoaDonFPT objectTableHoaDonFPT = null;
+
+		String dinhDangMuonTraVe = "json";
+		String url = FPTUltis.URL_TRACUU_HOADON;
+
+		url = UriBuilder.fromUri(url).queryParam("type", dinhDangMuonTraVe)
+					  .queryParam("sid", sidHoaDon)
+
+					  .build().toString();
+
+		Data.ghiLogRequest("url Get : " + url);
+		String response = ConnectUsingGet.getContentWithHeader(url, user.username, user.password);
+		response = response.replace("//", "");
+		if (response.indexOf("[")== -1) {
+			result.result = response;
+		} else {
+			response = "{\"listHD\":" + response + "}";
+			Data.ghiLogRequest(" FPT: " + response);
+			Gson gson = new GsonBuilder()
+								.registerTypeAdapter(double.class, new DoubleTypeAdapter())
+								.registerTypeAdapter(int.class, new IntegerTypeAdapter())
+								.create();
+			Response_TC r = gson.fromJson(response, Response_TC.class);
+			objectTableHoaDonFPT.sidHoaDon = sidHoaDon;
+			objectTableHoaDonFPT.kiHieuHoaDon = r.listHD.get(0).doc.serial;
+			objectTableHoaDonFPT.mauSoHoaDon = r.listHD.get(0).doc.form;
+			objectTableHoaDonFPT.soHoaDon = r.listHD.get(0).doc.seq;
+			objectTableHoaDonFPT.thoiGianFPT = r.listHD.get(0).doc.idt;
+
+//				Object_ListHoaDon hddg = Main.objectResponseToObjectHoaDonDonGian(r);
+//				ArrayList<Doc_TC> ar = new Gson().fromJson(response, Doc_TC.class);
+			result.msgCode = ErrorCode.SUCCESS;
+			result.msgContent = ErrorCode.MES_SUCCESS;
+			result.result = r;
+		}
+		return objectTableHoaDonFPT;
+	}
+
+
 }
