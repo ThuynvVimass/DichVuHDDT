@@ -373,19 +373,13 @@ public class FPTFunc {
 				wrongNotice.budget_relationid = objInput.maDonViPhuThuoc;
 				wrongNotice.place = objInput.diaDanh;
 
-				// Lấy thông tin hoá đơn muốn huỷ từ DB - thông qua sidHoaDon
-				ObjectTableHoaDonFPT thongTinHoaDon = TableHoaDonFPT.layDuLieu(objInput.sidHoaDon);
+				// Lấy thông tin hoá đơn muốn huỷ thông qua sidHoaDon
+				ObjectTableHoaDonFPT thongTinHoaDon = traCuuThongTinHoaDon (objInput.sidHoaDon, objRoot.user);
 				if (thongTinHoaDon != null){
 					wrongNotice.items = taoDuLieu_ThongTinHoaDonHuy (thongTinHoaDon, objInput.lyDo);
 				} else {
-					// Nếu không thấy thì lấy thông tin từ DB, tìm kiếm qua FPT
-					thongTinHoaDon = traCuuHoaDon3 (objRoot.user, objInput.sidHoaDon );
-					if (thongTinHoaDon != null ){
-						wrongNotice.items = taoDuLieu_ThongTinHoaDonHuy (thongTinHoaDon, objInput.lyDo);
-					} else {
-						result.msgContent = "Không tìm thấy hoá đơn với sidHoaDon: " + objInput.sidHoaDon;
-						return new Gson().toJson(result);
-					}
+					result.msgContent = "Không tìm thấy hoá đơn với sidHoaDon: " + objInput.sidHoaDon;
+					return new Gson().toJson(result);
 				}
 
 				objRoot.wrongnotice = wrongNotice;
@@ -437,15 +431,23 @@ public class FPTFunc {
 		inv.adj.rdt = objInput.ngayVanBanThoaThuan;
 		inv.adj.rea = objInput.lyDoDieuChinh;
 		inv.adj.ref = objInput.soVanBanThoaThuan;
-		inv.adj.seq = objInput.thongTinHoaHoaDon;
 
 		if (objInput.sidHoaDon.equals("")) {
-//			inv.sid = VimassCommon.generateSessionKey(15);
 			result.result = "Lỗi: thiếu thông tin sidHoaDon";
 			return new Gson().toJson(result);
 		}
 		else
 			inv.sid = objInput.sidHoaDon;
+
+		// Lấy thông tin hoá đơn muốn thay thế thông qua sidHoaDonCu
+		ObjectTableHoaDonFPT thongTinHoaDon = traCuuThongTinHoaDon (objInput.sidHoaDonCu, objRoot.user);
+		if (thongTinHoaDon != null){
+			inv.adj.seq = taoDuLieu_ThongTinHoaThayThe (thongTinHoaDon);
+		} else {
+			result.msgContent = "Không tìm thấy hoá đơn với sidHoaDon: " + objInput.sidHoaDonCu;
+			return new Gson().toJson(result);
+		}
+
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		inv.type = FPTUltis.HOADON_GTGT;
 //		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
@@ -457,7 +459,7 @@ public class FPTFunc {
 			ThongTin thongTinNguoiMua = new ThongTin();
 			ObjectTraCuuThongTinDoanhNghiep input_tracuu = new ObjectTraCuuThongTinDoanhNghiep();
 			input_tracuu.maSoThue = objInput.maSoThueNguoiMua;
-			input_tracuu.md5String = vn.vimass.utils.VimassCommon.bamMD5(objInput.maSoThueNguoiMua+"vsrbgjO6nV7M2SO");
+			input_tracuu.md5String = VimassCommon.bamMD5(objInput.maSoThueNguoiMua+"vsrbgjO6nV7M2SO");
 			String jsonNguoiBan = CMCFunc.getThongTinDonViBangMST(new Gson().toJson(input_tracuu));
 			if(jsonNguoiBan!=null&&jsonNguoiBan!="")
 			{
@@ -573,15 +575,23 @@ public class FPTFunc {
 		inv.adj.rdt = objInput.ngayVanBanThoaThuan;
 		inv.adj.rea = objInput.lyDoDieuChinh;
 		inv.adj.ref = objInput.soVanBanThoaThuan;
-		inv.adj.seq = objInput.thongTinHoaHoaDon;
 
 		if (objInput.sidHoaDon.equals("")) {
-//			inv.sid = VimassCommon.generateSessionKey(15);
 			result.result = "Lỗi: thiếu thông tin sidHoaDon";
 			return new Gson().toJson(result);
 		}
 		else
 			inv.sid = objInput.sidHoaDon;
+
+		// Lấy thông tin hoá đơn muốn điều chỉnh thông qua sidHoaDonCu
+		ObjectTableHoaDonFPT thongTinHoaDon = traCuuThongTinHoaDon (objInput.sidHoaDonCu, objRoot.user);
+		if (thongTinHoaDon != null){
+			inv.adj.seq = taoDuLieu_ThongTinHoaThayThe (thongTinHoaDon);
+		} else {
+			result.msgContent = "Không tìm thấy hoá đơn với sidHoaDon: " + objInput.sidHoaDonCu;
+			return new Gson().toJson(result);
+		}
+
 		inv.idt = VimassCommon.getTimeyyyyddMM_HHmmss(new Date().getTime());
 		inv.type = FPTUltis.HOADON_GTGT;
 //		inv.form = "1"; 		// mẫu hóa đơn đã đăng ký trên web
@@ -816,7 +826,7 @@ public class FPTFunc {
 		return new Gson().toJson(result);
 	}
 
-	public static String traCuuHoaDon(String input)
+	public static String traCuuHoaDonChiTiet(String input)
 	{
 		Data.ghiLogRequest("================ traCuuHoaDon() ================");
 		Data.ghiLogRequest("input " + input);
@@ -878,7 +888,7 @@ public class FPTFunc {
 		return new Gson().toJson(result);
 	}
 
-	public static String traCuuHoaDon2(String input)
+	public static String traCuuHoaDonChiTiet2(String input)
 	{
 		Data.ghiLogRequest("================ traCuuHoaDon2() ================");
 		Data.ghiLogRequest("input " + input);
@@ -1006,7 +1016,7 @@ public class FPTFunc {
 		return items;
 	}
 
-	private static ObjectTableHoaDonFPT traCuuHoaDon3(User user, String sidHoaDon)
+	private static ObjectTableHoaDonFPT traCuuHoaDonTuFPT(User user, String sidHoaDon)
 	{
 		Data.ghiLogRequest("================ traCuuHoaDon3() ================");
 		Data.ghiLogRequest("input: sidHoaDon " + sidHoaDon + ", user " + new Gson().toJson(user));
@@ -1019,6 +1029,7 @@ public class FPTFunc {
 		String url = FPTUltis.URL_TRACUU_HOADON;
 
 		url = UriBuilder.fromUri(url).queryParam("type", dinhDangMuonTraVe)
+					  .queryParam("stax", user.username.split("\\.")[0])
 					  .queryParam("sid", sidHoaDon)
 
 					  .build().toString();
@@ -1036,6 +1047,7 @@ public class FPTFunc {
 								.registerTypeAdapter(int.class, new IntegerTypeAdapter())
 								.create();
 			Response_TC r = gson.fromJson(response, Response_TC.class);
+			objectTableHoaDonFPT = new ObjectTableHoaDonFPT();
 			objectTableHoaDonFPT.sidHoaDon = sidHoaDon;
 			objectTableHoaDonFPT.kiHieuHoaDon = r.listHD.get(0).doc.serial;
 			objectTableHoaDonFPT.mauSoHoaDon = r.listHD.get(0).doc.form;
@@ -1049,6 +1061,20 @@ public class FPTFunc {
 			result.result = r;
 		}
 		return objectTableHoaDonFPT;
+	}
+
+	private static ObjectTableHoaDonFPT traCuuThongTinHoaDon (String sidHoaDon, User user){
+		// Lấy thông tin hoá đơn muốn huỷ từ DB - thông qua sidHoaDon
+		ObjectTableHoaDonFPT thongTinHoaDon = TableHoaDonFPT.layDuLieu(sidHoaDon);
+		if (thongTinHoaDon == null){
+			// Nếu không thấy thì lấy thông tin từ DB, tìm kiếm qua FPT
+			thongTinHoaDon = traCuuHoaDonTuFPT(user, sidHoaDon );
+		}
+		return thongTinHoaDon;
+	}
+
+	private static String taoDuLieu_ThongTinHoaThayThe(ObjectTableHoaDonFPT thongTinHoaDon) {
+		return  thongTinHoaDon.mauSoHoaDon + "-" + thongTinHoaDon.kiHieuHoaDon + "-" + thongTinHoaDon.soHoaDon;
 	}
 
 
