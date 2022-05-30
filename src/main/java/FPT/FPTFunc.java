@@ -147,7 +147,6 @@ public class FPTFunc {
 		inv.tradeamount =  0;
 		inv.discount =  0;
 		inv.aun =  2; 			// 1 tự quản lý cấp số HĐ, 2 hệ thống cấp số hóa đơn tăng dần
-		inv.sign =  -1; 		// hóa đơn xuất hoàn trả
 		inv.type_ref =  1;		// 1 hóa đơn TT78
 		inv.listnum =  ""; 		// bảng kê
 		inv.listdt =  ""; 		// list bảng kê
@@ -320,7 +319,6 @@ public class FPTFunc {
 		inv.tradeamount =  0;
 		inv.discount =  0;
 		inv.aun =  2; 			// 1 tự quản lý cấp số HĐ, 2 hệ thống cấp số hóa đơn tăng dần
-		inv.sign =  -1; 		// hóa đơn xuất hoàn trả
 		inv.type_ref =  1; 		// 1 hóa đơn TT78
 		inv.listnum =  ""; 		// bảng kê
 		inv.listdt =  ""; 		// list bảng kê
@@ -438,7 +436,10 @@ public class FPTFunc {
 		}
 		else
 			inv.sid = objInput.sidHoaDon;
-
+		if (objInput.sidHoaDonCu.equals("")) {
+			result.result = "Lỗi: thiếu thông tin sidHoaDonCu";
+			return new Gson().toJson(result);
+		}
 		// Lấy thông tin hoá đơn muốn thay thế thông qua sidHoaDonCu
 		ObjectTableHoaDonFPT thongTinHoaDon = traCuuThongTinHoaDon (objInput.sidHoaDonCu, objRoot.user);
 		if (thongTinHoaDon != null){
@@ -512,7 +513,6 @@ public class FPTFunc {
 		inv.tradeamount =  0;
 		inv.discount =  0;
 		inv.aun =  2;			// 1 tự quản lý cấp số HĐ, 2 hệ thống cấp số hóa đơn tăng dần
-		inv.sign =  -1; 		// hóa đơn xuất hoàn trả
 		inv.type_ref =  1; 		// 1 hóa đơn TT78
 		inv.listnum =  ""; 		// bảng kê
 		inv.listdt =  ""; 		// list bảng kê
@@ -656,7 +656,6 @@ public class FPTFunc {
 		inv.tradeamount =  0;
 		inv.discount =  0;
 		inv.aun =  2;			// 1 tự quản lý cấp số HĐ, 2 hệ thống cấp số hóa đơn tăng dần
-		inv.sign =  -1; 		// hóa đơn xuất hoàn trả
 		inv.type_ref =  1; 		// 1 hóa đơn TT78
 		inv.listnum =  ""; 		// bảng kê
 		inv.listdt =  ""; 		// list bảng kê
