@@ -118,7 +118,7 @@ public class ShareWebservice {
 	public String searchInvoice(String input) {
 
 		Data.ghiLogRequest("IP:" + request.getRemoteAddr());
-		return FPTFunc.traCuuHoaDon(input);
+		return FPTFunc.traCuuHoaDonChiTiet(input);
 		
 	}
 
@@ -127,7 +127,7 @@ public class ShareWebservice {
 	public String searchInvoice2(String input) {
 
 		Data.ghiLogRequest("IP:" + request.getRemoteAddr());
-		return FPTFunc.traCuuHoaDon2(input);
+		return FPTFunc.traCuuHoaDonChiTiet2(input);
 
 	}
 
